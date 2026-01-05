@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Framework Overlay for Raspberry Pi 5 -->
+<resources>
+    <!-- Display settings -->
+    <integer name="config_screenBrightnessDim">10</integer>
+    <integer name="config_screenBrightnessSettingDefault">128</integer>
+    <integer name="config_screenBrightnessSettingMaximum">255</integer>
+    <integer name="config_screenBrightnessSettingMinimum">1</integer>
+
+    <!-- Screen brightness mode: 0=manual, 1=automatic -->
+    <integer name="config_screenBrightnessMode">0</integer>
+
+    <!-- No automatic brightness sensor -->
+    <bool name="config_automatic_brightness_available">false</bool>
+
+    <!-- Lock screen -->
+    <bool name="config_enableLockScreenRotation">true</bool>
+
+    <!-- Hardware keys present -->
+    <integer name="config_deviceHardwareKeys">0</integer>
+
+    <!-- Allow rotation in any direction -->
+    <bool name="config_allowAllRotations">true</bool>
+
+    <!-- Navigation bar -->
+    <bool name="config_showNavigationBar">true</bool>
+
+    <!-- Enable WiFi -->
+    <bool name="config_wifi_background_scan_support">true</bool>
+    <bool name="config_wifi_dual_band_support">true</bool>
+    <bool name="config_wifi_softap_ieee80211ac_supported">true</bool>
+    <bool name="config_wifi_hotspot20_supported">false</bool>
+
+    <!-- Enable Bluetooth -->
+    <bool name="config_bluetooth_le_peripheral_mode_supported">true</bool>
+    <bool name="config_bluetooth_sco_off_call">true</bool>
+
+    <!-- USB Configuration -->
+    <bool name="config_hasUsbPortDeviceMode">true</bool>
+    <string name="config_usbDefaultFunction">mtp</string>
+
+    <!-- No mobile data -->
+    <bool name="config_networkLocationProviderPackage">false</bool>
+
+    <!-- Allow Ethernet -->
+    <bool name="config_ethernet_supported">true</bool>
+
+    <!-- No battery, always plugged -->
+    <integer name="config_criticalBatteryWarningLevel">0</integer>
+    <integer name="config_lowBatteryWarningLevel">0</integer>
+
+    <!-- Memory options -->
+    <bool name="config_lowRamDevice">false</bool>
+
+    <!-- Safe mode disabled -->
+    <bool name="config_safeMediaVolumeEnabled">false</bool>
+
+    <!-- Night mode support -->
+    <bool name="config_nightDisplayAvailable">true</bool>
+
+    <!-- Display cutout -->
+    <string name="config_mainBuiltInDisplayCutout"></string>
+
+    <!-- Screen off timeout -->
+    <integer name="config_maximumScreenDimDuration">7000</integer>
+
+    <!-- Keyboard -->
+    <bool name="config_lidControlsSleep">false</bool>
+
+    <!-- Multi-user support -->
+    <bool name="config_enableMultiUserUI">true</bool>
+    <integer name="config_multiuserMaximumUsers">4</integer>
+
+    <!-- Enable doze -->
+    <bool name="config_dozeAlwaysOnEnabled">false</bool>
+    <bool name="config_dozePulseOnAodEnabled">false</bool>
+
+    <!-- Screen density -->
+    <integer name="config_screenBrightnessDimFloat">0.04</integer>
+
+    <!-- Long press timeout -->
+    <integer name="config_longPressOnPowerBehavior">1</integer>
+
+    <!-- Power off alarm -->
+    <bool name="config_showAlarmIcon">true</bool>
+
+    <!-- Ethernet settings -->
+    <string-array name="config_ethernet_interfaces">
+        <item>eth0</item>
+    </string-array>
+</resources>

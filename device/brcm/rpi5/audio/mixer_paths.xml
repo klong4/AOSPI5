@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Raspberry Pi 5 Mixer Paths Configuration -->
+<mixer>
+    <!-- HDMI Output -->
+    <path name="hdmi-output">
+        <ctl name="HDMI Playback Switch" value="1"/>
+        <ctl name="HDMI Playback Volume" value="100"/>
+    </path>
+
+    <!-- Headphone Output (3.5mm Jack) -->
+    <path name="headphone-output">
+        <ctl name="Headphone Playback Switch" value="1"/>
+        <ctl name="Headphone Playback Volume" value="80"/>
+    </path>
+
+    <!-- USB Audio Output -->
+    <path name="usb-output">
+        <ctl name="PCM Playback Switch" value="1"/>
+        <ctl name="PCM Playback Volume" value="100"/>
+    </path>
+
+    <!-- USB Microphone Input -->
+    <path name="usb-input">
+        <ctl name="Mic Capture Switch" value="1"/>
+        <ctl name="Mic Capture Volume" value="80"/>
+    </path>
+
+    <!-- I2S DAC Output (for HAT DACs) -->
+    <path name="i2s-output">
+        <ctl name="Digital Playback Switch" value="1"/>
+        <ctl name="Digital Playback Volume" value="100"/>
+    </path>
+
+    <!-- Mute all outputs -->
+    <path name="mute-all">
+        <ctl name="HDMI Playback Switch" value="0"/>
+        <ctl name="Headphone Playback Switch" value="0"/>
+        <ctl name="PCM Playback Switch" value="0"/>
+        <ctl name="Digital Playback Switch" value="0"/>
+    </path>
+
+    <!-- Speaker (HDMI default) -->
+    <path name="speaker">
+        <path name="mute-all"/>
+        <path name="hdmi-output"/>
+    </path>
+
+    <!-- Headphones -->
+    <path name="headphones">
+        <path name="mute-all"/>
+        <path name="headphone-output"/>
+    </path>
+
+    <!-- Line out (3.5mm jack) -->
+    <path name="line-out">
+        <path name="mute-all"/>
+        <path name="headphone-output"/>
+    </path>
+
+    <!-- HDMI -->
+    <path name="aux-digital">
+        <path name="mute-all"/>
+        <path name="hdmi-output"/>
+    </path>
+
+    <!-- USB -->
+    <path name="usb-device">
+        <path name="mute-all"/>
+        <path name="usb-output"/>
+    </path>
+
+    <!-- Default -->
+    <path name="default">
+        <path name="speaker"/>
+    </path>
+</mixer>

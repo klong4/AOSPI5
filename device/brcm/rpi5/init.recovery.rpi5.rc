@@ -1,0 +1,34 @@
+# Raspberry Pi 5 Recovery Init Script
+# Copyright (C) 2024 The Android Open Source Project
+
+on early-init
+    # Mount firmware partition
+    wait /dev/block/mmcblk0p1
+    mount vfat /dev/block/mmcblk0p1 /boot/firmware ro
+
+on init
+    # Create mount points
+    mkdir /mnt/system
+    mkdir /mnt/vendor
+
+on fs
+    # Wait for partitions
+    wait /dev/block/by-name/system_a
+    wait /dev/block/by-name/vendor_a
+
+on boot
+    # Set USB for recovery
+    setprop sys.usb.configfs 1
+    setprop sys.usb.config adb
+
+    # Start USB
+    start adbd
+
+    # Set permissions for display
+    chown system graphics /dev/dri/card0
+    chmod 0660 /dev/dri/card0
+
+service recovery /system/bin/recovery
+    class main
+    socket recovery stream 660 system system
+    seclabel u:r:recovery:s0

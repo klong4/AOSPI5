@@ -1,0 +1,49 @@
+// Copyright (C) 2024 The Android Open Source Project
+// Light HAL for Raspberry Pi 5
+
+cc_library_shared {
+    name: "android.hardware.light@2.0-impl.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    srcs: [
+        "Light.cpp",
+    ],
+    shared_libs: [
+        "liblog",
+        "libhardware",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "android.hardware.light@2.0",
+    ],
+    static_libs: [
+        "libbase",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-DLOG_TAG=\"LightHAL\"",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.light@2.0-service.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    init_rc: ["android.hardware.light@2.0-service.rpi5.rc"],
+    vintf_fragments: ["android.hardware.light@2.0-service.rpi5.xml"],
+    srcs: ["service.cpp"],
+    shared_libs: [
+        "liblog",
+        "libhardware",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "android.hardware.light@2.0",
+        "android.hardware.light@2.0-impl.rpi5",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+}

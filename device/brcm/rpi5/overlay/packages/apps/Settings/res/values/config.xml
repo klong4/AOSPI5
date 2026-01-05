@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings Overlay for Raspberry Pi 5 -->
+<resources>
+    <!-- Device name -->
+    <string name="config_default_device_name">Raspberry Pi 5</string>
+
+    <!-- Show memory in device info -->
+    <bool name="config_show_memory">true</bool>
+
+    <!-- Enable developer options by default -->
+    <bool name="config_enableDeveloperSettings">true</bool>
+
+    <!-- WiFi settings -->
+    <bool name="config_wifi_settings_supported">true</bool>
+
+    <!-- Bluetooth settings -->
+    <bool name="config_bluetooth_settings_supported">true</bool>
+
+    <!-- Network settings -->
+    <bool name="config_show_ethernet_settings">true</bool>
+
+    <!-- Display settings -->
+    <bool name="config_show_display_settings">true</bool>
+    <bool name="config_show_screen_resolution_settings">true</bool>
+
+    <!-- Sound settings -->
+    <bool name="config_show_sound_settings">true</bool>
+
+    <!-- Storage settings -->
+    <bool name="config_show_storage_settings">true</bool>
+
+    <!-- Application settings -->
+    <bool name="config_show_app_settings">true</bool>
+
+    <!-- Security settings -->
+    <bool name="config_show_security_settings">true</bool>
+
+    <!-- System settings -->
+    <bool name="config_show_system_settings">true</bool>
+
+    <!-- About device -->
+    <bool name="config_show_about_device">true</bool>
+
+    <!-- USB settings -->
+    <bool name="config_show_usb_settings">true</bool>
+
+    <!-- HDMI settings -->
+    <bool name="config_show_hdmi_settings">true</bool>
+
+    <!-- Date and time settings -->
+    <bool name="config_show_date_time_settings">true</bool>
+
+    <!-- Language settings -->
+    <bool name="config_show_language_settings">true</bool>
+
+    <!-- Input settings -->
+    <bool name="config_show_input_settings">true</bool>
+
+    <!-- Accessibility settings -->
+    <bool name="config_show_accessibility_settings">true</bool>
+
+    <!-- Print settings -->
+    <bool name="config_show_print_settings">true</bool>
+
+    <!-- Casting settings -->
+    <bool name="config_show_cast_settings">true</bool>
+
+    <!-- Night display settings -->
+    <bool name="config_show_night_display_settings">true</bool>
+
+    <!-- Fingerprint not available -->
+    <bool name="config_show_fingerprint_settings">false</bool>
+
+    <!-- Face unlock not available -->
+    <bool name="config_show_face_settings">false</bool>
+
+    <!-- Mobile network not available -->
+    <bool name="config_show_mobile_network_settings">false</bool>
+
+    <!-- No SIM card settings -->
+    <bool name="config_show_sim_card_settings">false</bool>
+
+    <!-- Battery settings (external power) -->
+    <bool name="config_show_battery_settings">false</bool>
+</resources>

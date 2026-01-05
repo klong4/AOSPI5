@@ -1,0 +1,55 @@
+// Bluetooth audio configuration for Raspberry Pi 5
+{
+  "codec_capabilities": [
+    {
+      "codec_type": "SBC",
+      "bits_per_sample": [16],
+      "channel_mode": ["mono", "stereo"],
+      "sample_rate": [44100, 48000],
+      "specific": {
+        "min_bitpool": 2,
+        "max_bitpool": 53,
+        "block_length": [4, 8, 12, 16],
+        "subbands": [4, 8],
+        "allocation_method": ["loudness", "snr"]
+      }
+    },
+    {
+      "codec_type": "AAC",
+      "bits_per_sample": [16],
+      "channel_mode": ["mono", "stereo"],
+      "sample_rate": [44100, 48000],
+      "specific": {
+        "object_type": "MPEG-2 AAC LC",
+        "variable_bit_rate_supported": true
+      }
+    },
+    {
+      "codec_type": "APTX",
+      "bits_per_sample": [16],
+      "channel_mode": ["stereo"],
+      "sample_rate": [44100, 48000]
+    },
+    {
+      "codec_type": "APTX-HD",
+      "bits_per_sample": [24],
+      "channel_mode": ["stereo"],
+      "sample_rate": [44100, 48000]
+    },
+    {
+      "codec_type": "LDAC",
+      "bits_per_sample": [16, 24, 32],
+      "channel_mode": ["mono", "dual", "stereo"],
+      "sample_rate": [44100, 48000, 88200, 96000],
+      "specific": {
+        "quality_mode": ["ABR", "high", "mid", "low"]
+      }
+    }
+  ],
+  "session_type": "A2DP_SINK",
+  "transport": {
+    "socket": {
+      "path": "/dev/socket/bluetooth_audio"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+// Copyright (C) 2024 The Android Open Source Project
+// Vendor module Android.bp
+
+soong_namespace {
+}
+
+// Build all vendor HALs
+subdirs = [
+    "hal",
+]
+
+// Prebuilt firmware
+prebuilt_firmware {
+    name: "brcmfmac43455-sdio.bin",
+    src: "proprietary/firmware/brcm/brcmfmac43455-sdio.bin",
+    vendor: true,
+    sub_dir: "firmware/brcm",
+}
+
+prebuilt_firmware {
+    name: "BCM4345C0.hcd",
+    src: "proprietary/firmware/brcm/BCM4345C0.hcd",
+    vendor: true,
+    sub_dir: "firmware/brcm",
+}

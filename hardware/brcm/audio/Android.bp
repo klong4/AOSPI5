@@ -1,0 +1,99 @@
+// Copyright (C) 2024 The Android Open Source Project
+// Audio HAL for Raspberry Pi 5
+
+cc_library_shared {
+    name: "audio.primary.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    srcs: [
+        "Audio.cpp",
+        "AudioDevice.cpp",
+        "AudioStream.cpp",
+        "Mixer.cpp",
+    ],
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libutils",
+        "libhardware",
+        "libtinyalsa",
+        "libaudioutils",
+        "libaudioroute",
+    ],
+    static_libs: [
+        "libbase",
+    ],
+    header_libs: [
+        "libaudio_system_headers",
+        "libhardware_headers",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-DLOG_TAG=\"AudioHAL\"",
+    ],
+}
+
+cc_library_shared {
+    name: "android.hardware.audio@7.0-impl.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    srcs: [
+        "hidl/Device.cpp",
+        "hidl/DevicesFactory.cpp",
+        "hidl/PrimaryDevice.cpp",
+        "hidl/Stream.cpp",
+        "hidl/StreamIn.cpp",
+        "hidl/StreamOut.cpp",
+    ],
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libutils",
+        "libhardware",
+        "libhidlbase",
+        "libtinyalsa",
+        "libaudioutils",
+        "libaudioroute",
+        "libfmq",
+        "audio.primary.rpi5",
+        "android.hardware.audio@7.0",
+        "android.hardware.audio@7.1",
+        "android.hardware.audio.common@7.0",
+        "android.hardware.audio.common@7.0-util",
+    ],
+    static_libs: [
+        "libbase",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-DLOG_TAG=\"AudioHIDL\"",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.audio.service.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    init_rc: ["android.hardware.audio.service.rpi5.rc"],
+    vintf_fragments: ["android.hardware.audio.service.rpi5.xml"],
+    srcs: ["hidl/service.cpp"],
+    shared_libs: [
+        "liblog",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "libbinder",
+        "android.hardware.audio@7.0",
+        "android.hardware.audio@7.1",
+        "android.hardware.audio.common@7.0",
+        "android.hardware.audio.effect@7.0",
+        "android.hardware.audio@7.0-impl.rpi5",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+}

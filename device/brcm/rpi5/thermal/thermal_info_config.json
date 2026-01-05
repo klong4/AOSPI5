@@ -1,0 +1,66 @@
+{
+  "sensors": [
+    {
+      "name": "cpu",
+      "type": "CPU",
+      "sysfs_path": "/sys/class/thermal/thermal_zone0/temp",
+      "multiplier": 0.001,
+      "hot_threshold": 80.0,
+      "hot_hysteresis": 5.0,
+      "critical_threshold": 90.0
+    },
+    {
+      "name": "gpu",
+      "type": "GPU",
+      "sysfs_path": "/sys/class/thermal/thermal_zone1/temp",
+      "multiplier": 0.001,
+      "hot_threshold": 80.0,
+      "hot_hysteresis": 5.0,
+      "critical_threshold": 90.0
+    },
+    {
+      "name": "pmic",
+      "type": "PMIC",
+      "sysfs_path": "/sys/class/hwmon/hwmon0/temp1_input",
+      "multiplier": 0.001,
+      "hot_threshold": 85.0,
+      "hot_hysteresis": 5.0,
+      "critical_threshold": 95.0
+    }
+  ],
+  "cooling_devices": [
+    {
+      "name": "fan",
+      "type": "FAN",
+      "sysfs_path": "/sys/class/hwmon/hwmon0/pwm1",
+      "max_state": 255
+    },
+    {
+      "name": "cpu_freq",
+      "type": "CPU_THROTTLE",
+      "sysfs_path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq",
+      "max_state": 2400000
+    }
+  ],
+  "cooling_policies": [
+    {
+      "sensor": "cpu",
+      "cooling_device": "fan",
+      "trip_points": [
+        { "temp": 50.0, "state": 64 },
+        { "temp": 60.0, "state": 128 },
+        { "temp": 70.0, "state": 192 },
+        { "temp": 80.0, "state": 255 }
+      ]
+    },
+    {
+      "sensor": "cpu",
+      "cooling_device": "cpu_freq",
+      "trip_points": [
+        { "temp": 80.0, "state": 2000000 },
+        { "temp": 85.0, "state": 1800000 },
+        { "temp": 90.0, "state": 1500000 }
+      ]
+    }
+  ]
+}

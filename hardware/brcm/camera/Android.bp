@@ -1,0 +1,142 @@
+// Copyright (C) 2024 The Android Open Source Project
+// Camera HAL for Raspberry Pi 5
+
+cc_library_shared {
+    name: "camera.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    srcs: [
+        "CameraHAL.cpp",
+        "CameraDevice.cpp",
+        "CameraMetadata.cpp",
+        "V4L2Camera.cpp",
+        "ExifUtils.cpp",
+        "JpegCompressor.cpp",
+    ],
+    shared_libs: [
+        "liblog",
+        "libhardware",
+        "libcamera_metadata",
+        "libcutils",
+        "libutils",
+        "libsync",
+        "libjpeg",
+        "libexif",
+        "libyuv",
+    ],
+    static_libs: [
+        "libbase",
+        "android.hardware.camera.common@1.0-helper",
+    ],
+    include_dirs: [
+        "system/media/camera/include",
+        "system/media/private/camera/include",
+    ],
+    header_libs: [
+        "media_plugin_headers",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-fvisibility=hidden",
+        "-DLOG_TAG=\"CameraHAL\"",
+    ],
+}
+
+cc_library_shared {
+    name: "android.hardware.camera.provider@2.7-impl.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    srcs: [
+        "provider/CameraProvider.cpp",
+        "provider/ExternalCameraProvider.cpp",
+    ],
+    shared_libs: [
+        "liblog",
+        "libhidlbase",
+        "libhardware",
+        "libcamera_metadata",
+        "libcutils",
+        "libutils",
+        "camera.rpi5",
+        "android.hardware.camera.common@1.0",
+        "android.hardware.camera.device@1.0",
+        "android.hardware.camera.device@3.2",
+        "android.hardware.camera.device@3.3",
+        "android.hardware.camera.device@3.4",
+        "android.hardware.camera.device@3.5",
+        "android.hardware.camera.device@3.6",
+        "android.hardware.camera.device@3.7",
+        "android.hardware.camera.provider@2.4",
+        "android.hardware.camera.provider@2.5",
+        "android.hardware.camera.provider@2.6",
+        "android.hardware.camera.provider@2.7",
+    ],
+    static_libs: [
+        "libbase",
+        "android.hardware.camera.common@1.0-helper",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-DLOG_TAG=\"CameraProvider\"",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.camera.provider@2.7-service.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    init_rc: ["android.hardware.camera.provider@2.7-service.rpi5.rc"],
+    vintf_fragments: ["android.hardware.camera.provider@2.7-service.rpi5.xml"],
+    srcs: ["provider/service.cpp"],
+    shared_libs: [
+        "liblog",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "android.hardware.camera.common@1.0",
+        "android.hardware.camera.device@3.7",
+        "android.hardware.camera.provider@2.7",
+        "android.hardware.camera.provider@2.7-impl.rpi5",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+}
+
+cc_library_shared {
+    name: "android.hardware.camera.provider@2.7-external.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    srcs: [
+        "external/ExternalCameraDevice.cpp",
+        "external/ExternalCameraSession.cpp",
+        "external/ExternalCameraUtils.cpp",
+    ],
+    shared_libs: [
+        "liblog",
+        "libhidlbase",
+        "libhardware",
+        "libcamera_metadata",
+        "libcutils",
+        "libutils",
+        "libsync",
+        "libjpeg",
+        "libyuv",
+        "android.hardware.camera.common@1.0",
+        "android.hardware.camera.device@3.7",
+        "android.hardware.camera.provider@2.7",
+    ],
+    static_libs: [
+        "libbase",
+        "android.hardware.camera.common@1.0-helper",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-DLOG_TAG=\"ExternalCamera\"",
+    ],
+}

@@ -1,0 +1,23 @@
+// Copyright (C) 2024 The Android Open Source Project
+// GPIO Controller App for Developers
+
+android_app {
+    name: "GpioController",
+    srcs: ["src/**/*.java"],
+    resource_dirs: ["res"],
+    manifest: "AndroidManifest.xml",
+
+    platform_apis: true,
+    certificate: "platform",
+    privileged: true,
+    system_ext_specific: true,
+
+    static_libs: [
+        "androidx.appcompat_appcompat",
+        "com.google.android.material_material",
+    ],
+
+    optimize: {
+        enabled: false,
+    },
+}

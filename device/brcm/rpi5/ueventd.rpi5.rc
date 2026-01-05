@@ -1,0 +1,109 @@
+# Raspberry Pi 5 ueventd configuration
+# Copyright (C) 2024 The Android Open Source Project
+
+# GPU/DRM devices
+/dev/dri/*                0660   system     graphics
+/dev/dri/card*            0660   system     graphics
+/dev/dri/renderD*         0660   system     graphics
+
+# GPIO devices
+/dev/gpiochip*            0660   system     gpio
+/dev/gpiomem              0660   root       gpio
+
+# I2C devices
+/dev/i2c-*                0660   system     system
+
+# SPI devices
+/dev/spidev*              0660   system     system
+
+# UART devices
+/dev/ttyAMA*              0660   system     system
+/dev/ttyS*                0660   system     system
+/dev/ttyUSB*              0660   system     system
+/dev/ttyACM*              0660   system     system
+
+# Video devices
+/dev/video*               0660   system     camera
+/dev/v4l-subdev*          0660   system     camera
+/dev/media*               0660   system     camera
+
+# Input devices
+/dev/input/*              0660   system     input
+/dev/uinput               0660   system     bluetooth
+
+# USB devices
+/dev/bus/usb/*            0660   system     usb
+/dev/usb_accessory        0660   system     usb
+
+# Sound devices
+/dev/snd/*                0660   system     audio
+/dev/snd/pcmC*D*c         0660   system     audio
+/dev/snd/pcmC*D*p         0660   system     audio
+/dev/snd/controlC*        0660   system     audio
+/dev/snd/timer            0660   system     audio
+/dev/snd/hwC*D*           0660   system     audio
+
+# Memory devices
+/dev/ion                  0664   system     system
+/dev/dma_heap/*           0664   system     system
+
+# Watchdog
+/dev/watchdog             0660   system     system
+/dev/watchdog0            0660   system     system
+
+# RTC
+/dev/rtc0                 0660   system     system
+/dev/rtc1                 0660   system     system
+
+# Random number generators
+/dev/hw_random            0440   root       system
+/dev/random               0666   root       root
+/dev/urandom              0666   root       root
+
+# Thermal
+/sys/devices/virtual/thermal/thermal_zone* temp                        0644   system system
+/sys/devices/virtual/thermal/thermal_zone* trip_point_*_temp           0644   system system
+/sys/devices/virtual/thermal/thermal_zone* trip_point_*_hyst           0644   system system
+
+# CPU frequency
+/sys/devices/system/cpu/cpu* cpufreq/scaling_max_freq                  0664   system system
+/sys/devices/system/cpu/cpu* cpufreq/scaling_min_freq                  0664   system system
+/sys/devices/system/cpu/cpu* cpufreq/scaling_governor                  0664   system system
+
+# PWM
+/sys/class/pwm/pwmchip* export                                         0220   system gpio
+/sys/class/pwm/pwmchip* unexport                                       0220   system gpio
+/sys/class/pwm/pwmchip*/pwm* duty_cycle                                0664   system gpio
+/sys/class/pwm/pwmchip*/pwm* period                                    0664   system gpio
+/sys/class/pwm/pwmchip*/pwm* enable                                    0664   system gpio
+/sys/class/pwm/pwmchip*/pwm* polarity                                  0664   system gpio
+
+# GPIO sysfs
+/sys/class/gpio           export                                       0220   system gpio
+/sys/class/gpio           unexport                                     0220   system gpio
+/sys/class/gpio/gpio*     direction                                    0664   system gpio
+/sys/class/gpio/gpio*     value                                        0664   system gpio
+/sys/class/gpio/gpio*     edge                                         0664   system gpio
+/sys/class/gpio/gpio*     active_low                                   0664   system gpio
+
+# LEDs
+/sys/class/leds/ACT       brightness                                   0664   system system
+/sys/class/leds/PWR       brightness                                   0664   system system
+/sys/class/leds/*         brightness                                   0664   system system
+/sys/class/leds/*         trigger                                      0664   system system
+
+# Backlight
+/sys/class/backlight/*    brightness                                   0664   system system
+/sys/class/backlight/*    max_brightness                               0444   system system
+
+# Fan control
+/sys/class/hwmon/hwmon*   pwm*                                         0664   system system
+/sys/class/hwmon/hwmon*   fan*_input                                   0444   system system
+/sys/class/hwmon/hwmon*   temp*_input                                  0444   system system
+
+# Network
+/sys/class/net/*          mtu                                          0664   system system
+
+# Firmware loading
+/sys/devices/platform/soc/*.firmware loading                           0664   root   root
+/sys/devices/platform/soc/*.firmware data                              0664   root   root

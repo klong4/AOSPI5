@@ -1,0 +1,27 @@
+# Raspberry Pi 5 Bluetooth SELinux Policy
+
+# Bluetooth attachment service
+type btattach, domain;
+type btattach_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(btattach)
+
+# Access to UART devices
+allow btattach tty_device:chr_file rw_file_perms;
+
+# Access to serial ports
+allow btattach serial_device:chr_file rw_file_perms;
+
+# Access to rfkill
+allow btattach sysfs_rfkill:file rw_file_perms;
+allow btattach sysfs_rfkill:dir r_dir_perms;
+
+# Access to Bluetooth driver
+allow btattach sysfs_bluetooth:file rw_file_perms;
+allow btattach sysfs_bluetooth:dir r_dir_perms;
+
+# Allow waking device
+wakelock_use(btattach)
+
+# Property access
+set_prop(btattach, bluetooth_prop)

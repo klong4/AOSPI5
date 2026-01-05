@@ -1,0 +1,36 @@
+# Raspberry Pi 5 Camera HAL SELinux Policy
+type hal_camera_rpi5, domain;
+type hal_camera_rpi5_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(hal_camera_rpi5)
+
+hal_server_domain(hal_camera_rpi5, hal_camera)
+
+# Access to video devices
+allow hal_camera_rpi5 video_device:chr_file rw_file_perms;
+allow hal_camera_rpi5 video_device:dir r_dir_perms;
+
+# Access to media devices
+allow hal_camera_rpi5 device:chr_file { read write ioctl open };
+
+# Access to DRM for buffer allocation
+allow hal_camera_rpi5 gpu_device:chr_file rw_file_perms;
+
+# Allow camera HAL to read from sysfs
+allow hal_camera_rpi5 sysfs:file r_file_perms;
+allow hal_camera_rpi5 sysfs:dir r_dir_perms;
+
+# Access to vendor configs
+allow hal_camera_rpi5 vendor_configs_file:file r_file_perms;
+allow hal_camera_rpi5 vendor_configs_file:dir r_dir_perms;
+
+# Binder access
+binder_call(hal_camera_rpi5, cameraserver)
+binder_call(cameraserver, hal_camera_rpi5)
+
+# HwBinder
+hwbinder_use(hal_camera_rpi5)
+
+# Ion memory access
+allow hal_camera_rpi5 ion_device:chr_file rw_file_perms;
+allow hal_camera_rpi5 dmabuf_system_heap_device:chr_file rw_file_perms;

@@ -1,0 +1,36 @@
+// Copyright (C) 2024 The Android Open Source Project
+// Raspberry Pi Settings App
+
+android_app {
+    name: "RaspberryPiSettings",
+    srcs: ["src/**/*.java"],
+    resource_dirs: ["res"],
+    manifest: "AndroidManifest.xml",
+
+    platform_apis: true,
+    certificate: "platform",
+    privileged: true,
+    system_ext_specific: true,
+
+    static_libs: [
+        "androidx.appcompat_appcompat",
+        "androidx.preference_preference",
+        "com.google.android.material_material",
+    ],
+
+    optimize: {
+        enabled: false,
+    },
+
+    required: [
+        "privapp_whitelist_com.raspberrypi.settings",
+    ],
+}
+
+prebuilt_etc {
+    name: "privapp_whitelist_com.raspberrypi.settings",
+    system_ext_specific: true,
+    sub_dir: "permissions",
+    src: "permissions/privapp-permissions-raspberrypi.xml",
+    filename_from_src: true,
+}

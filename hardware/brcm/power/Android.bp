@@ -1,0 +1,55 @@
+// Copyright (C) 2024 The Android Open Source Project
+// Power HAL for Raspberry Pi 5
+
+cc_library_shared {
+    name: "android.hardware.power@1.3-impl.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    srcs: [
+        "Power.cpp",
+    ],
+    shared_libs: [
+        "liblog",
+        "libhardware",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "android.hardware.power@1.0",
+        "android.hardware.power@1.1",
+        "android.hardware.power@1.2",
+        "android.hardware.power@1.3",
+    ],
+    static_libs: [
+        "libbase",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-DLOG_TAG=\"PowerHAL\"",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.power@1.3-service.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    init_rc: ["android.hardware.power@1.3-service.rpi5.rc"],
+    vintf_fragments: ["android.hardware.power@1.3-service.rpi5.xml"],
+    srcs: ["service.cpp"],
+    shared_libs: [
+        "liblog",
+        "libhardware",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "android.hardware.power@1.0",
+        "android.hardware.power@1.1",
+        "android.hardware.power@1.2",
+        "android.hardware.power@1.3",
+        "android.hardware.power@1.3-impl.rpi5",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+}

@@ -1,0 +1,25 @@
+# Raspberry Pi 5 GPIO Device SELinux Policy
+type gpio_device, dev_type;
+
+# GPIO HAL domain
+type hal_gpio_rpi5, domain;
+type hal_gpio_rpi5_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(hal_gpio_rpi5)
+
+# Access to GPIO devices
+allow hal_gpio_rpi5 gpio_device:chr_file rw_file_perms;
+
+# Access to GPIO sysfs
+type sysfs_gpio, sysfs_type, fs_type;
+allow hal_gpio_rpi5 sysfs_gpio:file rw_file_perms;
+allow hal_gpio_rpi5 sysfs_gpio:dir rw_dir_perms;
+
+# Access to gpiochip devices
+allow hal_gpio_rpi5 device:chr_file { read write ioctl open };
+
+# HwBinder
+hwbinder_use(hal_gpio_rpi5)
+
+# Allow system apps to access GPIO HAL
+binder_call(system_app, hal_gpio_rpi5)

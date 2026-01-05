@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Raspberry Pi 5 WiFi Configuration -->
+<WifiConfigStore>
+    <MacRandomizationSetting>1</MacRandomizationSetting>
+    <NetworkList />
+    <PasspointNetworkList />
+    <DeletedEphemeralSSIDList />
+    <ScanResults />
+</WifiConfigStore>

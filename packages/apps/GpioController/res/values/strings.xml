@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GPIO Controller</string>
+    <string name="export_all">Export All</string>
+    <string name="unexport_all">Unexport All</string>
+    <string name="tap_to_toggle">Tap pin to export/toggle</string>
+</resources>

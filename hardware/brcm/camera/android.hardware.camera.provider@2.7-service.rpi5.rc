@@ -1,0 +1,7 @@
+service vendor.camera-hal-2-7 /vendor/bin/hw/android.hardware.camera.provider@2.7-service.rpi5
+    class hal
+    user cameraserver
+    group audio camera input drmrpc system
+    ioprio rt 4
+    capabilities SYS_NICE
+    writepid /dev/cpuset/camera-daemon/tasks /dev/stune/foreground/tasks

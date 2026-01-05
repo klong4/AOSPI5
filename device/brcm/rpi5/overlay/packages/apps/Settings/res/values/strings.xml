@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Strings Overlay for Raspberry Pi 5 -->
+<resources>
+    <string name="config_default_device_name">Raspberry Pi 5</string>
+    <string name="device_name">Raspberry Pi 5</string>
+</resources>

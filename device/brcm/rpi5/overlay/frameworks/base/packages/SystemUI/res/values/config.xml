@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SystemUI Overlay for Raspberry Pi 5 -->
+<resources>
+    <!-- Enable status bar -->
+    <bool name="config_enableFullscreenUserSwitcher">false</bool>
+
+    <!-- Quick settings tiles -->
+    <string name="quick_settings_tiles_default">wifi,bt,flashlight,rotation,battery,cell,airplane,cast,night,screenrecord</string>
+    
+    <!-- Show network speed in status bar -->
+    <bool name="config_showActivity">true</bool>
+
+    <!-- Battery percentage -->
+    <bool name="config_showBatteryEstimate">false</bool>
+
+    <!-- Volume panel location -->
+    <integer name="volume_panel_gravity">80</integer>
+
+    <!-- Status bar icons -->
+    <string-array name="config_statusBarIcons">
+        <item><xliff:g id="id">@string/status_bar_alarm_clock</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_rotate</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_headset</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_data_saver</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_managed_profile</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_ime</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_sync_failing</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_sync_active</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_cast</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_hotspot</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_location</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_bluetooth</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_nfc</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_tty</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_speakerphone</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_zen</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_mute</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_volume</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_wifi</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_ethernet</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_battery</xliff:g></item>
+        <item><xliff:g id="id">@string/status_bar_clock</xliff:g></item>
+    </string-array>
+
+    <!-- Rounded corners -->
+    <dimen name="rounded_corner_radius">0dp</dimen>
+    <dimen name="rounded_corner_radius_top">0dp</dimen>
+    <dimen name="rounded_corner_radius_bottom">0dp</dimen>
+
+    <!-- Keyboard shortcuts -->
+    <bool name="config_showMenuShortcutsWhenKeyboardPresent">true</bool>
+
+    <!-- Power menu -->
+    <bool name="config_show_restart_in_power_menu">true</bool>
+
+    <!-- Picture-in-picture -->
+    <dimen name="pip_minimal_size">48dp</dimen>
+</resources>

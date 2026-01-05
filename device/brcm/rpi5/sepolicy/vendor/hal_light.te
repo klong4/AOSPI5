@@ -1,0 +1,19 @@
+# Raspberry Pi 5 Light HAL SELinux Policy
+type hal_light_rpi5, domain;
+type hal_light_rpi5_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(hal_light_rpi5)
+
+hal_server_domain(hal_light_rpi5, hal_light)
+
+# Access to LED sysfs
+allow hal_light_rpi5 sysfs_leds:file rw_file_perms;
+allow hal_light_rpi5 sysfs_leds:dir r_dir_perms;
+
+# Access to backlight sysfs
+type sysfs_backlight, sysfs_type, fs_type;
+allow hal_light_rpi5 sysfs_backlight:file rw_file_perms;
+allow hal_light_rpi5 sysfs_backlight:dir r_dir_perms;
+
+# HwBinder
+hwbinder_use(hal_light_rpi5)

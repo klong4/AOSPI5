@@ -1,0 +1,68 @@
+// Copyright (C) 2024 The Android Open Source Project
+// Thermal HAL for Raspberry Pi 5
+
+cc_library_shared {
+    name: "android.hardware.thermal@2.0-impl.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    srcs: [
+        "Thermal.cpp",
+        "ThermalUtils.cpp",
+    ],
+    shared_libs: [
+        "liblog",
+        "libhardware",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "android.hardware.thermal@1.0",
+        "android.hardware.thermal@2.0",
+    ],
+    static_libs: [
+        "libbase",
+        "libjsoncpp",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-DLOG_TAG=\"ThermalHAL\"",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.thermal@2.0-service.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    init_rc: ["android.hardware.thermal@2.0-service.rpi5.rc"],
+    vintf_fragments: ["android.hardware.thermal@2.0-service.rpi5.xml"],
+    srcs: ["service.cpp"],
+    shared_libs: [
+        "liblog",
+        "libhardware",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "android.hardware.thermal@1.0",
+        "android.hardware.thermal@2.0",
+        "android.hardware.thermal@2.0-impl.rpi5",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+}
+
+cc_library_static {
+    name: "libthermalutils.rpi5",
+    proprietary: true,
+    srcs: ["ThermalUtils.cpp"],
+    shared_libs: [
+        "liblog",
+        "libcutils",
+    ],
+    static_libs: [
+        "libbase",
+        "libjsoncpp",
+    ],
+    export_include_dirs: ["."],
+}

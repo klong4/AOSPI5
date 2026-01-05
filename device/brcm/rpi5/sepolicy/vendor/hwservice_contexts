@@ -1,0 +1,9 @@
+# Raspberry Pi 5 HwService Contexts
+android.hardware.gpio::IGpio                           u:object_r:hal_gpio_hwservice:s0
+android.hardware.power::IPower                         u:object_r:hal_power_hwservice:s0
+android.hardware.thermal::IThermal                     u:object_r:hal_thermal_hwservice:s0
+android.hardware.light::ILight                         u:object_r:hal_light_hwservice:s0
+android.hardware.usb::IUsb                             u:object_r:hal_usb_hwservice:s0
+android.hardware.camera.provider::ICameraProvider      u:object_r:hal_camera_hwservice:s0
+android.hardware.audio::IDevicesFactory                u:object_r:hal_audio_hwservice:s0
+android.hardware.audio.effect::IEffectsFactory         u:object_r:hal_audio_hwservice:s0

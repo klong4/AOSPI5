@@ -1,0 +1,21 @@
+# Raspberry Pi 5 GPIO Keys Layout
+# For hardware buttons connected via GPIO
+
+[GPIO Keys]
+device.internal = 1
+
+# Power button
+key 116   POWER
+
+# Volume buttons (if connected)
+key 114   VOLUME_DOWN
+key 115   VOLUME_UP
+
+# Back button (if connected)
+key 158   BACK
+
+# Home button (if connected)
+key 172   HOME
+
+# Menu button (if connected)
+key 127   MENU

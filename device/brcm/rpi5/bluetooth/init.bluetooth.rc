@@ -1,0 +1,26 @@
+# Raspberry Pi 5 Bluetooth Initialization
+# Copyright (C) 2024 The Android Open Source Project
+
+on boot
+    # Set Bluetooth address from device tree
+    setprop ro.bt.bdaddr_path "/proc/device-tree/serial-number"
+    
+    # Create directories
+    mkdir /data/vendor/bluetooth 0770 bluetooth bluetooth
+    mkdir /data/vendor/bluetooth/logs 0770 bluetooth bluetooth
+
+on property:ro.boot.btmacaddr=*
+    setprop persist.bluetooth.btmacaddr ${ro.boot.btmacaddr}
+
+service btattach /vendor/bin/btattach -B /dev/ttyAMA0 -P bcm -S 3000000 -N
+    class main
+    user bluetooth
+    group bluetooth net_bt_admin system
+    disabled
+    oneshot
+
+on property:bluetooth.hciattach=true
+    start btattach
+
+on property:bluetooth.hciattach=false
+    stop btattach

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Raspberry Pi Settings</string>
+    <string name="gpio_settings">GPIO Configuration</string>
+    <string name="display_settings">Display Settings</string>
+    <string name="performance_settings">Performance</string>
+    <string name="about_device">About Device</string>
+    
+    <string name="gpio_description">Configure GPIO pins for input/output</string>
+    <string name="display_description">Resolution, brightness, HDMI settings</string>
+    <string name="performance_description">CPU/GPU frequency and cooling</string>
+    <string name="about_description">Device information and status</string>
+    
+    <string name="apply">Apply</string>
+    <string name="read">Read</string>
+    <string name="select_pin">Select GPIO Pin</string>
+    <string name="select_mode">Select Mode</string>
+    <string name="pin_value">Pin Value</string>
+    
+    <string name="resolution">Resolution</string>
+    <string name="brightness">Brightness</string>
+    <string name="hdmi_boost">HDMI Signal Boost</string>
+    
+    <string name="cpu_frequency">CPU Frequency</string>
+    <string name="gpu_frequency">GPU Frequency</string>
+    <string name="enable_overclock">Enable Overclocking</string>
+    <string name="overclock_warning">Warning: Overclocking may cause instability and requires adequate cooling</string>
+    
+    <string name="device_name">Device Name</string>
+    <string name="android_version">Android Version</string>
+    <string name="build_number">Build Number</string>
+    <string name="kernel_version">Kernel Version</string>
+    <string name="cpu_info">CPU</string>
+    <string name="memory_info">Memory</string>
+    <string name="serial_number">Serial Number</string>
+</resources>

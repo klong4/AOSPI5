@@ -1,0 +1,69 @@
+// Copyright (C) 2024 The Android Open Source Project
+// GPIO HAL for Raspberry Pi 5
+
+cc_library_shared {
+    name: "android.hardware.gpio@1.0-impl.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    srcs: [
+        "Gpio.cpp",
+    ],
+    shared_libs: [
+        "liblog",
+        "libhardware",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "libgpiod",
+        "android.hardware.gpio@1.0",
+    ],
+    static_libs: [
+        "libbase",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-DLOG_TAG=\"GpioHAL\"",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.gpio@1.0-service.rpi5",
+    relative_install_path: "hw",
+    proprietary: true,
+    init_rc: ["android.hardware.gpio@1.0-service.rpi5.rc"],
+    vintf_fragments: ["android.hardware.gpio@1.0-service.rpi5.xml"],
+    srcs: ["service.cpp"],
+    shared_libs: [
+        "liblog",
+        "libhardware",
+        "libhidlbase",
+        "libutils",
+        "libcutils",
+        "android.hardware.gpio@1.0",
+        "android.hardware.gpio@1.0-impl.rpi5",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+}
+
+cc_library_shared {
+    name: "libgpiod",
+    proprietary: true,
+    srcs: [
+        "libgpiod/core.c",
+        "libgpiod/ctxless.c",
+        "libgpiod/helpers.c",
+        "libgpiod/iter.c",
+        "libgpiod/misc.c",
+    ],
+    local_include_dirs: ["libgpiod/include"],
+    export_include_dirs: ["libgpiod/include"],
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-DGPIOD_VERSION_STR=\"2.0\"",
+    ],
+}

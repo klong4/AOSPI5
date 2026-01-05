@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Framework Manifest for Raspberry Pi 5 -->
+<manifest version="2.0" type="framework">
+    <!-- GPIO HAL - Raspberry Pi specific -->
+    <hal format="hidl">
+        <name>android.hardware.gpio</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.0::IGpio/default</fqname>
+    </hal>
+</manifest>

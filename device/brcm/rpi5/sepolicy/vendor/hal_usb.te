@@ -1,0 +1,27 @@
+# Raspberry Pi 5 USB HAL SELinux Policy
+type hal_usb_rpi5, domain;
+type hal_usb_rpi5_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(hal_usb_rpi5)
+
+hal_server_domain(hal_usb_rpi5, hal_usb)
+
+# Access to USB gadget configfs
+allow hal_usb_rpi5 configfs:file rw_file_perms;
+allow hal_usb_rpi5 configfs:dir rw_dir_perms;
+allow hal_usb_rpi5 configfs:lnk_file create_file_perms;
+
+# Access to USB sysfs
+type sysfs_usb, sysfs_type, fs_type;
+allow hal_usb_rpi5 sysfs_usb:file rw_file_perms;
+allow hal_usb_rpi5 sysfs_usb:dir r_dir_perms;
+
+# Access to UDC sysfs
+allow hal_usb_rpi5 sysfs:file rw_file_perms;
+allow hal_usb_rpi5 sysfs:dir r_dir_perms;
+
+# HwBinder
+hwbinder_use(hal_usb_rpi5)
+
+# inotify for USB state changes
+allow hal_usb_rpi5 self:netlink_kobject_uevent_socket create_socket_perms_no_ioctl;
