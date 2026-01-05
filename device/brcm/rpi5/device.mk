@@ -159,10 +159,11 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors-service.example
 
 # GPIO HAL (AIDL - Raspberry Pi specific)
-PRODUCT_PACKAGES += \
-    android.hardware.gpio-service.rpi5 \
-    gpio_service \
-    libgpiod
+# Disabled until custom AIDL interface is created
+# PRODUCT_PACKAGES += \
+#     android.hardware.gpio-service.rpi5 \
+#     gpio_service \
+#     libgpiod
 
 # Display settings (removed deprecated configstore)
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -242,3 +243,6 @@ PRODUCT_PACKAGES += \
     GpioController \
     PiCamera \
     PiTerminal
+
+# Inherit vendor configuration
+$(call inherit-product-if-exists, vendor/brcm/rpi5/rpi5-vendor.mk)

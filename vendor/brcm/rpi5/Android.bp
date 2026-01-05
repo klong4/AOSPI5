@@ -4,22 +4,24 @@
 soong_namespace {
 }
 
-// Build all vendor HALs
-subdirs = [
-    "hal",
-]
+// Build all vendor HALs - disabled until HAL subdirs exist
+// subdirs = [
+//     "hal",
+// ]
 
-// Prebuilt firmware
-prebuilt_firmware {
-    name: "brcmfmac43455-sdio.bin",
-    src: "proprietary/firmware/brcm/brcmfmac43455-sdio.bin",
-    vendor: true,
-    sub_dir: "firmware/brcm",
-}
+// Prebuilt firmware - disabled, firmware downloaded at flash time
+// The Broadcom firmware is not redistributable, users must obtain
+// it from the Raspberry Pi firmware repository
+// prebuilt_firmware {
+//     name: "brcmfmac43455-sdio.bin",
+//     src: "proprietary/firmware/brcm/brcmfmac43455-sdio.bin",
+//     vendor: true,
+//     sub_dir: "firmware/brcm",
+// }
 
-prebuilt_firmware {
-    name: "BCM4345C0.hcd",
-    src: "proprietary/firmware/brcm/BCM4345C0.hcd",
-    vendor: true,
-    sub_dir: "firmware/brcm",
-}
+// prebuilt_firmware {
+//     name: "BCM4345C0.hcd",
+//     src: "proprietary/firmware/brcm/BCM4345C0.hcd",
+//     vendor: true,
+//     sub_dir: "firmware/brcm",
+// }

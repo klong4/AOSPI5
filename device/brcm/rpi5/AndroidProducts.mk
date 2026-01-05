@@ -19,8 +19,10 @@ PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/rpi5_car.mk \
     $(LOCAL_DIR)/rpi5_tv.mk
 
+# Android 16 requires release config in lunch target
+# Format: product-release-variant
 COMMON_LUNCH_CHOICES := \
-    rpi5-userdebug \
-    rpi5-eng \
-    rpi5_car-userdebug \
-    rpi5_tv-userdebug
+    rpi5-ap2a-userdebug \
+    rpi5-ap2a-eng \
+    rpi5_car-ap2a-userdebug \
+    rpi5_tv-ap2a-userdebug

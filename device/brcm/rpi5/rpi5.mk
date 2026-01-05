@@ -22,7 +22,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 # Inherit from device-specific configurations
-$(call inherit-product, device/brcm/rpi5/device.mk)
+$(call inherit-product, device/brcm/rpi5/device_simple.mk)
 
 # Inherit vendor configurations if available
 $(call inherit-product-if-exists, vendor/brcm/rpi5/rpi5-vendor.mk)
