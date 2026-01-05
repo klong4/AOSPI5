@@ -12,6 +12,9 @@
 /dev/media[0-9]*                 u:object_r:video_device:s0
 /dev/dri/card[0-9]*              u:object_r:gpu_device:s0
 /dev/dri/renderD[0-9]*           u:object_r:gpu_device:s0
+/dev/fb[0-9]*                    u:object_r:fb_device:s0
+/dev/input/event[0-9]*           u:object_r:input_device:s0
+/dev/uinput                      u:object_r:uhid_device:s0
 
 # AIDL HAL executables (Android 16)
 /vendor/bin/hw/android\.hardware\.gpio-service\.rpi5           u:object_r:hal_gpio_rpi5_exec:s0
@@ -21,6 +24,8 @@
 /vendor/bin/hw/android\.hardware\.usb-service\.rpi5            u:object_r:hal_usb_rpi5_exec:s0
 /vendor/bin/hw/android\.hardware\.camera\.provider-service\.rpi5  u:object_r:hal_camera_rpi5_exec:s0
 /vendor/bin/hw/android\.hardware\.audio\.core-service\.rpi5    u:object_r:hal_audio_rpi5_exec:s0
+/vendor/bin/hw/android\.hardware\.graphics\.display-service\.rpi5  u:object_r:hal_display_rpi5_exec:s0
+/vendor/bin/hw/android\.hardware\.input\.touch-service\.rpi5   u:object_r:hal_touch_rpi5_exec:s0
 
 # Legacy HIDL HAL executables (deprecated, kept for reference)
 /vendor/bin/hw/android\.hardware\.gpio@1\.0-service\.rpi5      u:object_r:hal_gpio_rpi5_exec:s0
@@ -44,6 +49,10 @@
 /sys/devices/system/cpu(/.*)?    u:object_r:sysfs_cpu:s0
 /sys/class/rfkill(/.*)?          u:object_r:sysfs_rfkill:s0
 /sys/class/bluetooth(/.*)?       u:object_r:sysfs_bluetooth:s0
+/sys/class/drm(/.*)?             u:object_r:sysfs_drm:s0
+/sys/class/graphics(/.*)?        u:object_r:sysfs_graphics:s0
+/sys/class/input(/.*)?           u:object_r:sysfs_input:s0
+/sys/class/pwm(/.*)?             u:object_r:sysfs_pwm:s0
 
 # Vendor configs
 /vendor/etc/audio(/.*)?          u:object_r:vendor_configs_file:s0
@@ -51,8 +60,16 @@
 /vendor/etc/wifi(/.*)?           u:object_r:vendor_configs_file:s0
 /vendor/etc/bluetooth(/.*)?      u:object_r:vendor_configs_file:s0
 /vendor/etc/camera(/.*)?         u:object_r:vendor_configs_file:s0
+/vendor/etc/display(/.*)?        u:object_r:vendor_configs_file:s0
+/vendor/etc/touch(/.*)?          u:object_r:vendor_configs_file:s0
 
 # Data directories
 /data/vendor/bluetooth(/.*)?     u:object_r:bluetooth_data_file:s0
 /data/vendor/wifi(/.*)?          u:object_r:wifi_data_file:s0
 /data/vendor/camera(/.*)?        u:object_r:camera_data_file:s0
+/data/vendor/display(/.*)?       u:object_r:display_data_file:s0
+/data/vendor/touch(/.*)?         u:object_r:touch_data_file:s0
+
+# Firmware
+/vendor/firmware(/.*)?           u:object_r:firmware_file:s0
+/vendor/firmware/touch(/.*)?     u:object_r:firmware_file:s0

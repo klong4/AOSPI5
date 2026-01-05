@@ -1,0 +1,74 @@
+// Raspberry Pi 5 - Waveshare Large DSI Displays
+// Device Tree Overlays for 10", 11.9", 13.3" displays
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+// ============================================================================
+// Waveshare 10.1" DSI Display (1280x800)
+// ============================================================================
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&dsi1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            port {
+                dsi1_out: endpoint {
+                    remote-endpoint = <&panel_in>;
+                };
+            };
+            
+            panel: panel@0 {
+                compatible = "waveshare,10inch-dsi-lcd";
+                reg = <0>;
+                
+                width-mm = <217>;
+                height-mm = <136>;
+                
+                panel-timing {
+                    clock-frequency = <70000000>;
+                    hactive = <1280>;
+                    vactive = <800>;
+                    hfront-porch = <40>;
+                    hback-porch = <40>;
+                    hsync-len = <20>;
+                    vfront-porch = <10>;
+                    vback-porch = <10>;
+                    vsync-len = <10>;
+                };
+                
+                port {
+                    panel_in: endpoint {
+                        remote-endpoint = <&dsi1_out>;
+                    };
+                };
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            gt911_10inch: gt911@14 {
+                compatible = "goodix,gt911";
+                reg = <0x14>;
+                interrupt-parent = <&gpio>;
+                interrupts = <4 2>;
+                irq-gpios = <&gpio 4 0>;
+                reset-gpios = <&gpio 17 0>;
+                touchscreen-size-x = <1280>;
+                touchscreen-size-y = <800>;
+            };
+        };
+    };
+};

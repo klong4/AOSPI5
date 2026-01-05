@@ -27,6 +27,18 @@ persist.sys.power.           u:object_r:system_prop:s0
 # Display properties
 persist.sys.sf.              u:object_r:system_prop:s0
 ro.surface_flinger.          u:object_r:default_prop:s0
+vendor.display.              u:object_r:vendor_display_prop:s0
+persist.vendor.display.      u:object_r:vendor_display_prop:s0
+vendor.display.panel         u:object_r:vendor_display_prop:s0
+vendor.display.resolution    u:object_r:vendor_display_prop:s0
+vendor.display.rotation      u:object_r:vendor_display_prop:s0
+vendor.display.backlight     u:object_r:vendor_display_prop:s0
+
+# Touch properties
+vendor.touch.                u:object_r:vendor_touch_prop:s0
+persist.vendor.touch.        u:object_r:vendor_touch_prop:s0
+vendor.touch.controller      u:object_r:vendor_touch_prop:s0
+vendor.touch.calibration     u:object_r:vendor_touch_prop:s0
 
 # GPU properties
 ro.hardware.vulkan           u:object_r:default_prop:s0

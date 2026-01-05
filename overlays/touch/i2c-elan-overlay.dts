@@ -1,0 +1,38 @@
+// Raspberry Pi 5 - Elan Touchscreen
+// Device Tree Overlay for Elan touch controllers
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            elan_touch: elan_touch@10 {
+                compatible = "elan,ekth3500";
+                reg = <0x10>;
+                interrupt-parent = <&gpio>;
+                interrupts = <4 8>;
+                irq-gpios = <&gpio 4 0>;
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&gpio>;
+        __overlay__ {
+            elan_pins: elan_pins {
+                brcm,pins = <4>;
+                brcm,function = <0>;
+                brcm,pull = <2>;
+            };
+        };
+    };
+};

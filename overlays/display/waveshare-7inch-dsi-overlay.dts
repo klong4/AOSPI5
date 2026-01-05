@@ -1,0 +1,84 @@
+// Raspberry Pi 5 - Waveshare 7" DSI Displays
+// Device Tree Overlays for Waveshare 7" MIPI DSI displays
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+// ============================================================================
+// Waveshare 7" DSI Display (800x480)
+// ============================================================================
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&dsi1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            port {
+                dsi1_out: endpoint {
+                    remote-endpoint = <&panel_in>;
+                };
+            };
+            
+            panel: panel@0 {
+                compatible = "waveshare,7inch-dsi-lcd";
+                reg = <0>;
+                
+                width-mm = <154>;
+                height-mm = <86>;
+                
+                panel-timing {
+                    clock-frequency = <30000000>;
+                    hactive = <800>;
+                    vactive = <480>;
+                    hfront-porch = <40>;
+                    hback-porch = <40>;
+                    hsync-len = <48>;
+                    vfront-porch = <13>;
+                    vback-porch = <31>;
+                    vsync-len = <2>;
+                };
+                
+                port {
+                    panel_in: endpoint {
+                        remote-endpoint = <&dsi1_out>;
+                    };
+                };
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            gt911_7inch: gt911@14 {
+                compatible = "goodix,gt911";
+                reg = <0x14>;
+                interrupt-parent = <&gpio>;
+                interrupts = <4 2>;
+                irq-gpios = <&gpio 4 0>;
+                reset-gpios = <&gpio 17 0>;
+                touchscreen-size-x = <800>;
+                touchscreen-size-y = <480>;
+            };
+        };
+    };
+    
+    fragment@2 {
+        target = <&gpio>;
+        __overlay__ {
+            backlight_pins: backlight_pins {
+                brcm,pins = <18>;
+                brcm,function = <1>;  // Output
+            };
+        };
+    };
+};

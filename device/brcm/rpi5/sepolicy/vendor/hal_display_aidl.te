@@ -1,0 +1,58 @@
+# SELinux policy for AIDL Display HAL - Android 16
+# Raspberry Pi 5 - MIPI DSI and SPI Display Support
+
+type hal_display_rpi5, domain;
+type hal_display_rpi5_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(hal_display_rpi5)
+binder_use(hal_display_rpi5)
+
+# Allow Display HAL to serve AIDL interface
+hal_server_domain(hal_display_rpi5, hal_graphics_composer)
+
+# DRM/KMS device access for MIPI DSI displays
+allow hal_display_rpi5 gpu_device:chr_file rw_file_perms;
+allow hal_display_rpi5 graphics_device:chr_file rw_file_perms;
+allow hal_display_rpi5 graphics_device:dir r_dir_perms;
+allow hal_display_rpi5 device:dir r_dir_perms;
+
+# Framebuffer device access for legacy FB TFT displays
+allow hal_display_rpi5 fb_device:chr_file rw_file_perms;
+
+# SPI device access for SPI displays (ILI9341, ST7789, etc.)
+allow hal_display_rpi5 spidev_device:chr_file rw_file_perms;
+allow hal_display_rpi5 device:chr_file { open read write ioctl };
+
+# I2C device access for OLED displays (SSD1306, etc.)
+allow hal_display_rpi5 i2c_device:chr_file rw_file_perms;
+
+# GPIO access for display control pins (DC, RST, BL)
+allow hal_display_rpi5 gpio_device:chr_file rw_file_perms;
+allow hal_display_rpi5 sysfs_gpio:dir rw_dir_perms;
+allow hal_display_rpi5 sysfs_gpio:file rw_file_perms;
+
+# sysfs access for display/backlight control
+allow hal_display_rpi5 sysfs:dir r_dir_perms;
+allow hal_display_rpi5 sysfs:file rw_file_perms;
+allow hal_display_rpi5 sysfs_leds:dir r_dir_perms;
+allow hal_display_rpi5 sysfs_leds:file rw_file_perms;
+
+# DRM sysfs for panel detection and mode setting
+allow hal_display_rpi5 sysfs_drm:dir r_dir_perms;
+allow hal_display_rpi5 sysfs_drm:file rw_file_perms;
+
+# Backlight sysfs control
+allow hal_display_rpi5 sysfs_backlight:dir rw_dir_perms;
+allow hal_display_rpi5 sysfs_backlight:file rw_file_perms;
+
+# PWM sysfs for backlight brightness control
+allow hal_display_rpi5 sysfs_pwm:dir rw_dir_perms;
+allow hal_display_rpi5 sysfs_pwm:file rw_file_perms;
+
+# Memory mapping for framebuffer
+allow hal_display_rpi5 self:capability { sys_rawio mknod };
+
+# DSI command interface
+allow hal_display_rpi5 device:chr_file { map };
+
+vndk_use(hal_display_rpi5)

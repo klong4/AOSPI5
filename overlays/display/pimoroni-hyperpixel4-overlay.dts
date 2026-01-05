@@ -1,0 +1,92 @@
+// Raspberry Pi 5 - Pimoroni HyperPixel 4" Display
+// Device Tree Overlay for HyperPixel 4" (DPI interface)
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&gpio>;
+        __overlay__ {
+            dpi18_pins: dpi18_pins {
+                brcm,pins = <0 1 2 3 4 5 6 7 8 9 12 13 14 15 16 17 20 21 22 23 24 25>;
+                brcm,function = <6>;  // ALT2 = DPI
+                brcm,pull = <0>;      // No pull
+            };
+        };
+    };
+    
+    fragment@1 {
+        target-path = "/";
+        __overlay__ {
+            panel: panel {
+                compatible = "pimoroni,hyperpixel4";
+                
+                width-mm = <52>;
+                height-mm = <86>;
+                
+                timing: panel-timing {
+                    clock-frequency = <32000000>;
+                    hactive = <480>;
+                    hfront-porch = <10>;
+                    hsync-len = <16>;
+                    hback-porch = <59>;
+                    vactive = <800>;
+                    vfront-porch = <15>;
+                    vsync-len = <113>;
+                    vback-porch = <15>;
+                    
+                    hsync-active = <0>;
+                    vsync-active = <0>;
+                    de-active = <0>;
+                    pixelclk-active = <1>;
+                };
+                
+                port {
+                    panel_in: endpoint {
+                        remote-endpoint = <&dpi_out>;
+                    };
+                };
+            };
+        };
+    };
+    
+    fragment@2 {
+        target = <&dpi>;
+        __overlay__ {
+            status = "okay";
+            pinctrl-names = "default";
+            pinctrl-0 = <&dpi18_pins>;
+            
+            port {
+                dpi_out: endpoint {
+                    remote-endpoint = <&panel_in>;
+                };
+            };
+        };
+    };
+    
+    fragment@3 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            gt911_hyperpixel: gt911@5d {
+                compatible = "goodix,gt911";
+                reg = <0x5d>;
+                interrupt-parent = <&gpio>;
+                interrupts = <27 2>;
+                irq-gpios = <&gpio 27 0>;
+                touchscreen-size-x = <480>;
+                touchscreen-size-y = <800>;
+                touchscreen-inverted-x;
+                touchscreen-swapped-x-y;
+            };
+        };
+    };
+};

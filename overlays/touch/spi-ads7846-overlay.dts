@@ -1,0 +1,70 @@
+// Raspberry Pi 5 - ADS7846 Resistive Touchscreen
+// Device Tree Overlay for ADS7846/TSC2046 SPI touch controllers
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            ads7846: ads7846@1 {
+                compatible = "ti,ads7846";
+                reg = <1>;  // CE1
+                spi-max-frequency = <2000000>;
+                
+                interrupt-parent = <&gpio>;
+                interrupts = <17 2>;  // GPIO17, falling edge
+                pendown-gpio = <&gpio 17 0>;
+                
+                ti,x-plate-ohms = /bits/ 16 <60>;
+                ti,pressure-max = /bits/ 16 <255>;
+                ti,swap-xy;
+                
+                vcc-supply = <&vdd_3v3_reg>;
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&gpio>;
+        __overlay__ {
+            ads7846_pins: ads7846_pins {
+                brcm,pins = <17>;
+                brcm,function = <0>;
+                brcm,pull = <2>;
+            };
+        };
+    };
+    
+    fragment@2 {
+        target-path = "/";
+        __overlay__ {
+            vdd_3v3_reg: fixedregulator@0 {
+                compatible = "regulator-fixed";
+                regulator-name = "vdd-3v3";
+                regulator-min-microvolt = <3300000>;
+                regulator-max-microvolt = <3300000>;
+                regulator-boot-on;
+                regulator-always-on;
+            };
+        };
+    };
+    
+    __overrides__ {
+        cs = <&ads7846>,"reg:0";
+        speed = <&ads7846>,"spi-max-frequency:0";
+        penirq = <&ads7846>,"interrupts:0",
+                 <&ads7846>,"pendown-gpio:4",
+                 <&ads7846_pins>,"brcm,pins:0";
+        swapxy = <&ads7846>,"ti,swap-xy?";
+        xohms = <&ads7846>,"ti,x-plate-ohms;0";
+    };
+};

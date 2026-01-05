@@ -1,0 +1,41 @@
+// Raspberry Pi 5 - Ilitek ILI251x Touchscreen
+// Device Tree Overlay for ILI251x touch controller
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            ili251x: ili251x@41 {
+                compatible = "ilitek,ili251x";
+                reg = <0x41>;
+                interrupt-parent = <&gpio>;
+                interrupts = <4 2>;
+                irq-gpios = <&gpio 4 0>;
+                reset-gpios = <&gpio 17 0>;
+                touchscreen-size-x = <1280>;
+                touchscreen-size-y = <800>;
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&gpio>;
+        __overlay__ {
+            ili251x_pins: ili251x_pins {
+                brcm,pins = <4 17>;
+                brcm,function = <0 1>;
+                brcm,pull = <2 0>;
+            };
+        };
+    };
+};

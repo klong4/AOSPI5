@@ -1,0 +1,45 @@
+// Raspberry Pi 5 - Generic I2C Touchscreen Overlays
+// Device Tree Overlays for various I2C touch controllers
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+// ============================================================================
+// Focaltech FT5x06 Touchscreen
+// ============================================================================
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            ft5x06: ft5x06@38 {
+                compatible = "focaltech,ft5x06";
+                reg = <0x38>;
+                interrupt-parent = <&gpio>;
+                interrupts = <4 2>;  // GPIO4, falling edge
+                irq-gpios = <&gpio 4 0>;
+                touchscreen-size-x = <800>;
+                touchscreen-size-y = <480>;
+                touchscreen-fuzz-x = <0>;
+                touchscreen-fuzz-y = <0>;
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&gpio>;
+        __overlay__ {
+            ft5x06_pins: ft5x06_pins {
+                brcm,pins = <4>;
+                brcm,function = <0>;  // Input
+                brcm,pull = <2>;      // Pull-up
+            };
+        };
+    };
+};

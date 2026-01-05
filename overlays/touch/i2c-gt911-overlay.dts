@@ -1,0 +1,55 @@
+// Raspberry Pi 5 - Goodix GT911 Touchscreen
+// Device Tree Overlay for GT911 touch controller
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            gt911: gt911@5d {
+                compatible = "goodix,gt911";
+                reg = <0x5d>;
+                interrupt-parent = <&gpio>;
+                interrupts = <4 2>;  // GPIO4, falling edge
+                irq-gpios = <&gpio 4 0>;
+                reset-gpios = <&gpio 17 0>;
+                touchscreen-size-x = <1024>;
+                touchscreen-size-y = <600>;
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&gpio>;
+        __overlay__ {
+            gt911_pins: gt911_pins {
+                brcm,pins = <4 17>;
+                brcm,function = <0 1>;  // Input, Output
+                brcm,pull = <2 0>;      // Pull-up, None
+            };
+        };
+    };
+    
+    __overrides__ {
+        sizex = <&gt911>,"touchscreen-size-x:0";
+        sizey = <&gt911>,"touchscreen-size-y:0";
+        invx = <&gt911>,"touchscreen-inverted-x?";
+        invy = <&gt911>,"touchscreen-inverted-y?";
+        swapxy = <&gt911>,"touchscreen-swapped-x-y?";
+        irq_pin = <&gt911>,"interrupts:0",
+                  <&gt911>,"irq-gpios:4",
+                  <&gt911_pins>,"brcm,pins:0";
+        reset_pin = <&gt911>,"reset-gpios:4",
+                    <&gt911_pins>,"brcm,pins:4";
+        addr = <&gt911>,"reg:0";
+    };
+};

@@ -1,0 +1,34 @@
+// Raspberry Pi 5 - SSD1306 OLED Display
+// Device Tree Overlay for SSD1306 I2C/SPI OLED
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+// ============================================================================
+// SSD1306 128x64 I2C OLED Display
+// ============================================================================
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            ssd1306: ssd1306@3c {
+                compatible = "solomon,ssd1306fb-i2c";
+                reg = <0x3c>;
+                width = <128>;
+                height = <64>;
+                page-offset = <0>;
+                prechargep1 = <2>;
+                prechargep2 = <2>;
+                com-invdir;
+                segment-no-remap;
+            };
+        };
+    };
+};

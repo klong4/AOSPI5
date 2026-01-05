@@ -1,0 +1,39 @@
+// Raspberry Pi 5 - Atmel mXT Touchscreen
+// Device Tree Overlay for Atmel/Microchip mXT touch controllers
+// Copyright (C) 2025 The Android Open Source Project
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&i2c1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            atmel_mxt: atmel_mxt@4a {
+                compatible = "atmel,maxtouch";
+                reg = <0x4a>;
+                interrupt-parent = <&gpio>;
+                interrupts = <4 8>;  // GPIO4, low level
+                irq-gpios = <&gpio 4 0>;
+                reset-gpios = <&gpio 17 0>;
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&gpio>;
+        __overlay__ {
+            atmel_pins: atmel_pins {
+                brcm,pins = <4 17>;
+                brcm,function = <0 1>;
+                brcm,pull = <2 0>;
+            };
+        };
+    };
+};
