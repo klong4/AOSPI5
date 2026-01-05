@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Media codec configuration for Raspberry Pi 5 -->
+<MediaCodecs>
+    <Decoders>
+        <!-- Video Decoders -->
+        
+        <!-- H.264/AVC Decoder (V4L2 stateless) -->
+        <MediaCodec name="c2.v4l2.avc.decoder" type="video/avc" update="true">
+            <Limit name="size" min="16x16" max="4096x2304"/>
+            <Limit name="alignment" value="2x2"/>
+            <Limit name="block-size" value="16x16"/>
+            <Limit name="blocks-per-second" min="1" max="972000"/>
+            <Limit name="bitrate" range="1-100000000"/>
+            <Limit name="concurrent-instances" max="8"/>
+            <Feature name="adaptive-playback"/>
+            <Attribute name="software-codec" value="false"/>
+        </MediaCodec>
+
+        <!-- H.265/HEVC Decoder (V4L2 stateless) -->
+        <MediaCodec name="c2.v4l2.hevc.decoder" type="video/hevc" update="true">
+            <Limit name="size" min="16x16" max="4096x2304"/>
+            <Limit name="alignment" value="2x2"/>
+            <Limit name="block-size" value="16x16"/>
+            <Limit name="blocks-per-second" min="1" max="972000"/>
+            <Limit name="bitrate" range="1-100000000"/>
+            <Limit name="concurrent-instances" max="8"/>
+            <Feature name="adaptive-playback"/>
+            <Attribute name="software-codec" value="false"/>
+        </MediaCodec>
+
+        <!-- VP8 Decoder (Software fallback) -->
+        <MediaCodec name="c2.android.vp8.decoder" type="video/x-vnd.on2.vp8" update="true">
+            <Limit name="size" min="2x2" max="2048x2048"/>
+            <Limit name="alignment" value="2x2"/>
+            <Limit name="block-size" value="16x16"/>
+            <Limit name="blocks-per-second" min="1" max="500000"/>
+            <Limit name="bitrate" range="1-40000000"/>
+            <Feature name="adaptive-playback"/>
+        </MediaCodec>
+
+        <!-- VP9 Decoder (Software fallback) -->
+        <MediaCodec name="c2.android.vp9.decoder" type="video/x-vnd.on2.vp9" update="true">
+            <Limit name="size" min="2x2" max="2048x2048"/>
+            <Limit name="alignment" value="2x2"/>
+            <Limit name="block-size" value="16x16"/>
+            <Limit name="blocks-per-second" min="1" max="500000"/>
+            <Limit name="bitrate" range="1-40000000"/>
+            <Feature name="adaptive-playback"/>
+        </MediaCodec>
+
+        <!-- Audio Decoders -->
+        
+        <!-- AAC Decoder -->
+        <MediaCodec name="c2.android.aac.decoder" type="audio/mp4a-latm" update="true">
+            <Limit name="channel-count" max="8"/>
+            <Limit name="sample-rate" ranges="8000-96000"/>
+            <Limit name="bitrate" range="8000-960000"/>
+        </MediaCodec>
+
+        <!-- MP3 Decoder -->
+        <MediaCodec name="c2.android.mp3.decoder" type="audio/mpeg" update="true">
+            <Limit name="channel-count" max="2"/>
+            <Limit name="sample-rate" ranges="8000-48000"/>
+            <Limit name="bitrate" range="8000-320000"/>
+        </MediaCodec>
+
+        <!-- FLAC Decoder -->
+        <MediaCodec name="c2.android.flac.decoder" type="audio/flac" update="true">
+            <Limit name="channel-count" max="8"/>
+            <Limit name="sample-rate" ranges="1-655350"/>
+            <Limit name="bitrate" range="1-21000000"/>
+        </MediaCodec>
+
+        <!-- Vorbis Decoder -->
+        <MediaCodec name="c2.android.vorbis.decoder" type="audio/vorbis" update="true">
+            <Limit name="channel-count" max="8"/>
+            <Limit name="sample-rate" ranges="8000-96000"/>
+            <Limit name="bitrate" range="32000-500000"/>
+        </MediaCodec>
+
+        <!-- Opus Decoder -->
+        <MediaCodec name="c2.android.opus.decoder" type="audio/opus" update="true">
+            <Limit name="channel-count" max="8"/>
+            <Limit name="sample-rate" ranges="8000-48000"/>
+            <Limit name="bitrate" range="6000-510000"/>
+        </MediaCodec>
+    </Decoders>
+
+    <Encoders>
+        <!-- Video Encoders -->
+        
+        <!-- H.264/AVC Encoder (Software) -->
+        <MediaCodec name="c2.android.avc.encoder" type="video/avc" update="true">
+            <Limit name="size" min="16x16" max="1920x1088"/>
+            <Limit name="alignment" value="2x2"/>
+            <Limit name="block-size" value="16x16"/>
+            <Limit name="blocks-per-second" min="1" max="244800"/>
+            <Limit name="bitrate" range="1-12000000"/>
+            <Feature name="intra-refresh"/>
+        </MediaCodec>
+
+        <!-- H.265/HEVC Encoder (Software) -->
+        <MediaCodec name="c2.android.hevc.encoder" type="video/hevc" update="true">
+            <Limit name="size" min="16x16" max="1920x1088"/>
+            <Limit name="alignment" value="2x2"/>
+            <Limit name="block-size" value="16x16"/>
+            <Limit name="blocks-per-second" min="1" max="244800"/>
+            <Limit name="bitrate" range="1-10000000"/>
+        </MediaCodec>
+
+        <!-- VP8 Encoder -->
+        <MediaCodec name="c2.android.vp8.encoder" type="video/x-vnd.on2.vp8" update="true">
+            <Limit name="size" min="2x2" max="1920x1088"/>
+            <Limit name="alignment" value="2x2"/>
+            <Limit name="block-size" value="16x16"/>
+            <Limit name="blocks-per-second" min="1" max="244800"/>
+            <Limit name="bitrate" range="1-40000000"/>
+        </MediaCodec>
+
+        <!-- Audio Encoders -->
+        
+        <!-- AAC Encoder -->
+        <MediaCodec name="c2.android.aac.encoder" type="audio/mp4a-latm" update="true">
+            <Limit name="channel-count" max="6"/>
+            <Limit name="sample-rate" ranges="8000-96000"/>
+            <Limit name="bitrate" range="8000-960000"/>
+        </MediaCodec>
+
+        <!-- AMR-NB Encoder -->
+        <MediaCodec name="c2.android.amrnb.encoder" type="audio/3gpp" update="true">
+            <Limit name="channel-count" max="1"/>
+            <Limit name="sample-rate" ranges="8000"/>
+            <Limit name="bitrate" range="4750-12200"/>
+        </MediaCodec>
+
+        <!-- AMR-WB Encoder -->
+        <MediaCodec name="c2.android.amrwb.encoder" type="audio/amr-wb" update="true">
+            <Limit name="channel-count" max="1"/>
+            <Limit name="sample-rate" ranges="16000"/>
+            <Limit name="bitrate" range="6600-23850"/>
+        </MediaCodec>
+
+        <!-- FLAC Encoder -->
+        <MediaCodec name="c2.android.flac.encoder" type="audio/flac" update="true">
+            <Limit name="channel-count" max="2"/>
+            <Limit name="sample-rate" ranges="1-655350"/>
+            <Limit name="bitrate" range="1-21000000"/>
+            <Limit name="complexity" range="0-8" default="5"/>
+        </MediaCodec>
+
+        <!-- Opus Encoder -->
+        <MediaCodec name="c2.android.opus.encoder" type="audio/opus" update="true">
+            <Limit name="channel-count" max="2"/>
+            <Limit name="sample-rate" ranges="8000-48000"/>
+            <Limit name="bitrate" range="6000-510000"/>
+            <Limit name="complexity" range="0-10" default="5"/>
+        </MediaCodec>
+    </Encoders>
+</MediaCodecs>

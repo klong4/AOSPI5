@@ -1,0 +1,227 @@
+# Raspberry Pi 5 Init Script
+# Copyright (C) 2024 The Android Open Source Project
+
+import /vendor/etc/init/hw/init.rpi5.usb.rc
+
+on early-init
+    # Set up kernel tracing
+    write /sys/kernel/tracing/tracing_on 0
+
+    # Set the scheduler tuning
+    write /dev/cpuctl/background/cpu.shares 52
+    write /dev/cpuctl/background/cpu.rt_runtime_us 0
+    write /dev/cpuctl/foreground/cpu.shares 1024
+    write /dev/cpuctl/foreground/cpu.rt_runtime_us 800000
+    write /dev/cpuctl/system/cpu.shares 512
+    write /dev/cpuctl/system/cpu.rt_runtime_us 400000
+
+    # Mount debugfs
+    mount debugfs debugfs /sys/kernel/debug mode=755
+
+on init
+    # Create mount points
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    mkdir /storage/sdcard1 0700 root root
+
+    # Support legacy paths
+    symlink /sdcard /storage/self/primary
+
+    # Create cgroup mount points
+    mkdir /dev/cpuctl/system
+    mkdir /dev/cpuctl/system/background
+    mkdir /dev/cpuctl/foreground
+    mkdir /dev/cpuctl/background
+
+    # Set up scheduler
+    write /proc/sys/kernel/sched_child_runs_first 0
+    write /proc/sys/kernel/sched_rt_runtime_us 950000
+    write /proc/sys/kernel/sched_rt_period_us 1000000
+
+    # GPIO permissions
+    chown root gpio /sys/class/gpio/export
+    chown root gpio /sys/class/gpio/unexport
+    chmod 0220 /sys/class/gpio/export
+    chmod 0220 /sys/class/gpio/unexport
+
+on late-init
+    # Trigger device-specific late init
+    trigger late-fs
+    trigger post-fs
+    trigger post-fs-data
+    trigger boot
+
+on early-fs
+    # Mount vfat partitions
+    wait /dev/block/mmcblk0p1
+    mount vfat /dev/block/mmcblk0p1 /boot/firmware rw,noatime,fmask=0022,dmask=0022
+
+on fs
+    # Mount filesystems
+    mount_all /vendor/etc/fstab.rpi5 --early
+
+on late-fs
+    # Mount RW partitions which need run fsck
+    mount_all /vendor/etc/fstab.rpi5 --late
+
+on post-fs
+    # Set permissions for firmware
+    chown system system /sys/firmware/devicetree
+    chmod 0755 /sys/firmware/devicetree
+
+    # Set up kernel wake sources for battery
+    chown radio system /sys/power/wake_lock
+    chown radio system /sys/power/wake_unlock
+    chmod 0660 /sys/power/wake_lock
+    chmod 0660 /sys/power/wake_unlock
+
+on post-fs-data
+    # Create directories for camera
+    mkdir /data/vendor/camera 0770 camera camera
+
+    # Create directory for WiFi
+    mkdir /data/vendor/wifi 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa 0770 wifi wifi
+    mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
+
+    # Create directory for Bluetooth
+    mkdir /data/vendor/bluetooth 0770 bluetooth bluetooth
+
+    # Create directory for audio
+    mkdir /data/vendor/audio 0770 audio audio
+
+    # Create directory for GPU
+    mkdir /data/vendor/gpu 0770 system system
+
+    # Create directory for sensors
+    mkdir /data/vendor/sensor 0770 system system
+
+    # Set up GPIO data directory
+    mkdir /data/vendor/gpio 0770 system system
+
+    # Mark as boot complete
+    setprop vold.has_quota 1
+    setprop vold.has_reserved 1
+
+on boot
+    # Set up permissions for graphics
+    chown system graphics /dev/dri/card0
+    chown system graphics /dev/dri/renderD128
+    chmod 0660 /dev/dri/card0
+    chmod 0660 /dev/dri/renderD128
+
+    # Set up permissions for V4L2
+    chown system camera /dev/video0
+    chown system camera /dev/video1
+    chown system camera /dev/video10
+    chown system camera /dev/video11
+    chown system camera /dev/video12
+    chmod 0660 /dev/video0
+    chmod 0660 /dev/video1
+    chmod 0660 /dev/video10
+    chmod 0660 /dev/video11
+    chmod 0660 /dev/video12
+
+    # Set up I2C permissions
+    chown system system /dev/i2c-0
+    chown system system /dev/i2c-1
+    chown system system /dev/i2c-2
+    chmod 0660 /dev/i2c-0
+    chmod 0660 /dev/i2c-1
+    chmod 0660 /dev/i2c-2
+
+    # Set up SPI permissions
+    chown system system /dev/spidev0.0
+    chown system system /dev/spidev0.1
+    chmod 0660 /dev/spidev0.0
+    chmod 0660 /dev/spidev0.1
+
+    # Set up UART permissions
+    chown system system /dev/ttyAMA0
+    chown system system /dev/ttyAMA1
+    chmod 0660 /dev/ttyAMA0
+    chmod 0660 /dev/ttyAMA1
+
+    # Set up PWM permissions
+    chown system system /sys/class/pwm/pwmchip0/export
+    chown system system /sys/class/pwm/pwmchip0/unexport
+    chmod 0220 /sys/class/pwm/pwmchip0/export
+    chmod 0220 /sys/class/pwm/pwmchip0/unexport
+
+    # Set up CPU governor
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor schedutil
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor schedutil
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor schedutil
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor schedutil
+
+    # Set up thermal
+    chown system system /sys/class/thermal/thermal_zone0/trip_point_0_temp
+    chown system system /sys/class/thermal/thermal_zone0/trip_point_1_temp
+    chmod 0664 /sys/class/thermal/thermal_zone0/trip_point_0_temp
+    chmod 0664 /sys/class/thermal/thermal_zone0/trip_point_1_temp
+
+    # Set up backlight (for DSI displays)
+    chown system system /sys/class/backlight/backlight/brightness
+    chmod 0664 /sys/class/backlight/backlight/brightness
+
+    # Set up LED
+    chown system system /sys/class/leds/ACT/brightness
+    chown system system /sys/class/leds/PWR/brightness
+    chmod 0664 /sys/class/leds/ACT/brightness
+    chmod 0664 /sys/class/leds/PWR/brightness
+
+    # Enable zram
+    swapon_all /vendor/etc/fstab.rpi5
+
+    # Set property for Wi-Fi interface
+    setprop wifi.interface wlan0
+
+on property:sys.boot_completed=1
+    # Set final CPU frequency
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 600000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2400000
+    
+    # Enable KSM
+    write /sys/kernel/mm/ksm/run 1
+    write /sys/kernel/mm/ksm/sleep_millisecs 250
+    write /sys/kernel/mm/ksm/pages_to_scan 100
+
+    # Start GPIO daemon
+    start gpio_service
+
+# Services
+
+service gpu_init /vendor/bin/gpu_init.sh
+    class core
+    user root
+    group root
+    oneshot
+    disabled
+
+service gpio_service /vendor/bin/hw/android.hardware.gpio@1.0-service.rpi5
+    class hal
+    user system
+    group system gpio
+
+service vendor.hwcomposer-2-4 /vendor/bin/hw/android.hardware.graphics.composer@2.4-service
+    class hal animation
+    user system
+    group graphics drmrpc
+    capabilities SYS_NICE
+    onrestart restart surfaceflinger
+
+service vendor.camera-provider-2-7 /vendor/bin/hw/android.hardware.camera.provider@2.7-service.rpi5
+    class hal
+    user cameraserver
+    group audio camera drmrpc media input
+
+on property:ro.debuggable=1
+    # Enable ADB
+    start adbd
+
+on property:sys.usb.config=mtp,adb && property:sys.usb.configfs=1
+    # Start USB MTP with ADB
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "mtp_adb"
+    symlink /config/usb_gadget/g1/functions/mtp.gs0 /config/usb_gadget/g1/configs/b.1/f1
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f2
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+    setprop sys.usb.state ${sys.usb.config}

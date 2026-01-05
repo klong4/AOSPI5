@@ -1,0 +1,27 @@
+# Raspberry Pi 5 system properties
+
+# Display
+ro.sf.lcd_density=240
+ro.hardware.egl=mesa
+ro.hardware.gralloc=minigbm
+debug.egl.hw=1
+
+# GPU
+ro.opengles.version=196610
+persist.demo.hdmirotation=landscape
+persist.demo.rotationlock=true
+
+# Graphics
+debug.hwui.renderer=opengl
+debug.hwui.use_partial_invalidation=false
+debug.hwui.disable_vsync=false
+
+# Dalvik
+dalvik.vm.heapsize=512m
+dalvik.vm.heapgrowthlimit=256m
+
+# USB
+persist.sys.usb.config=mtp,adb
+
+# Logging
+ro.logd.auditd=false

@@ -1,0 +1,25 @@
+# Raspberry Pi 5 fstab
+
+# Android partitions
+/dev/block/mmcblk0p1    /boot/firmware   vfat    defaults                                                   wait,check
+/dev/block/mmcblk0p2    /boot            ext4    defaults                                                   wait,check
+system                  /system          ext4    ro,barrier=1                                               wait,logical,first_stage_mount,slotselect,avb=vbmeta_system
+vendor                  /vendor          ext4    ro,barrier=1                                               wait,logical,first_stage_mount,slotselect,avb
+product                 /product         ext4    ro,barrier=1                                               wait,logical,first_stage_mount,slotselect,avb
+system_ext              /system_ext      ext4    ro,barrier=1                                               wait,logical,first_stage_mount,slotselect,avb
+odm                     /odm             ext4    ro,barrier=1                                               wait,logical,first_stage_mount,slotselect,avb
+/dev/block/by-name/userdata /data        f2fs    noatime,nosuid,nodev,discard,fsync_mode=nobarrier,reserve_root=32768,resgid=1065,inlinecrypt wait,check,quota,reservedsize=128M,checkpoint=fs,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized,keydirectory=/metadata/vold/metadata_encryption,metadata_encryption=aes-256-xts:wrappedkey_v0
+/dev/block/by-name/metadata /metadata    ext4    noatime,nosuid,nodev,discard                               wait,check,formattable,first_stage_mount
+/dev/block/by-name/cache    /cache       ext4    noatime,nosuid,nodev,noauto_da_alloc,errors=panic          wait,check
+/dev/block/by-name/misc     /misc        emmc    defaults                                                   defaults
+
+# SD card and USB storage
+/devices/platform/axi/*.pcie/*.usb/usb*             auto    auto    defaults    voldmanaged=usb:auto
+/devices/platform/axi/*.usb/usb*                    auto    auto    defaults    voldmanaged=usb:auto
+
+# NVMe storage (PCIe)
+/dev/block/nvme0n1p1    /mnt/nvme        ext4    noatime,nosuid,nodev                                       wait,voldmanaged=nvme:auto
+
+# Recovery
+/dev/block/by-name/boot_a  /boot          emmc    defaults                                                   recoveryonly
+/dev/block/by-name/boot_b  /boot          emmc    defaults                                                   recoveryonly

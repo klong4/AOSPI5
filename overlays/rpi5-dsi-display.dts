@@ -1,0 +1,77 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Device Tree Overlay for Raspberry Pi Official 7" DSI Touchscreen
+ * on Raspberry Pi 5 with Android
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "raspberrypi,5-model-b", "brcm,bcm2712";
+
+    fragment@0 {
+        target = <&dsi1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            port {
+                dsi_out: endpoint {
+                    remote-endpoint = <&panel_in>;
+                };
+            };
+
+            panel: panel@0 {
+                compatible = "raspberrypi,7inch-dsi-panel";
+                reg = <0>;
+                power-supply = <&panel_power>;
+                backlight = <&panel_backlight>;
+
+                port {
+                    panel_in: endpoint {
+                        remote-endpoint = <&dsi_out>;
+                    };
+                };
+            };
+        };
+    };
+
+    fragment@1 {
+        target = <&i2c1>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            /* Touchscreen controller */
+            ft5406: ft5406@38 {
+                compatible = "edt,edt-ft5406";
+                reg = <0x38>;
+                touchscreen-size-x = <800>;
+                touchscreen-size-y = <480>;
+            };
+        };
+    };
+
+    fragment@2 {
+        target-path = "/";
+        __overlay__ {
+            panel_power: panel-power {
+                compatible = "regulator-fixed";
+                regulator-name = "panel-power";
+                regulator-min-microvolt = <3300000>;
+                regulator-max-microvolt = <3300000>;
+                gpio = <&gpio 44 GPIO_ACTIVE_HIGH>;
+                enable-active-high;
+            };
+
+            panel_backlight: panel-backlight {
+                compatible = "gpio-backlight";
+                gpios = <&gpio 45 GPIO_ACTIVE_HIGH>;
+                default-on;
+            };
+        };
+    };
+};

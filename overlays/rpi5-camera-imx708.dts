@@ -1,0 +1,144 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Device Tree Overlay for Pi Camera Module 3 on Raspberry Pi 5
+ * with Android Camera HAL support
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+    compatible = "raspberrypi,5-model-b", "brcm,bcm2712";
+
+    fragment@0 {
+        target = <&csi0>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            port {
+                csi0_ep: endpoint {
+                    remote-endpoint = <&cam0_ep>;
+                    clock-lanes = <0>;
+                    data-lanes = <1 2>;
+                };
+            };
+        };
+    };
+
+    fragment@1 {
+        target = <&i2c0>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            /* IMX708 sensor (Pi Camera Module 3) */
+            imx708: imx708@1a {
+                compatible = "sony,imx708";
+                reg = <0x1a>;
+                status = "okay";
+
+                clocks = <&cam0_clk>;
+                clock-names = "xvclk";
+
+                VANA-supply = <&cam0_reg>;
+                VDIG-supply = <&cam0_reg>;
+                VDDL-supply = <&cam0_reg>;
+
+                rotation = <180>;
+                orientation = <2>;
+
+                port {
+                    cam0_ep: endpoint {
+                        remote-endpoint = <&csi0_ep>;
+                        clock-lanes = <0>;
+                        data-lanes = <1 2>;
+                        clock-noncontinuous;
+                        link-frequencies = /bits/ 64 <450000000>;
+                    };
+                };
+            };
+        };
+    };
+
+    fragment@2 {
+        target-path = "/";
+        __overlay__ {
+            cam0_reg: cam0-reg {
+                compatible = "regulator-fixed";
+                regulator-name = "cam0-reg";
+                regulator-min-microvolt = <2800000>;
+                regulator-max-microvolt = <2800000>;
+                gpio = <&gpio 29 GPIO_ACTIVE_HIGH>;
+                enable-active-high;
+            };
+
+            cam0_clk: cam0-clk {
+                compatible = "fixed-clock";
+                #clock-cells = <0>;
+                clock-frequency = <24000000>;
+            };
+        };
+    };
+
+    /* Second camera port */
+    fragment@3 {
+        target = <&csi1>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+
+            port {
+                csi1_ep: endpoint {
+                    remote-endpoint = <&cam1_ep>;
+                    clock-lanes = <0>;
+                    data-lanes = <1 2>;
+                };
+            };
+        };
+    };
+
+    fragment@4 {
+        target = <&i2c1>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            /* Secondary camera (optional) */
+            imx708_2: imx708@1a {
+                compatible = "sony,imx708";
+                reg = <0x1a>;
+                status = "disabled";
+
+                clocks = <&cam1_clk>;
+                clock-names = "xvclk";
+
+                port {
+                    cam1_ep: endpoint {
+                        remote-endpoint = <&csi1_ep>;
+                        clock-lanes = <0>;
+                        data-lanes = <1 2>;
+                        clock-noncontinuous;
+                    };
+                };
+            };
+        };
+    };
+
+    fragment@5 {
+        target-path = "/";
+        __overlay__ {
+            cam1_clk: cam1-clk {
+                compatible = "fixed-clock";
+                #clock-cells = <0>;
+                clock-frequency = <24000000>;
+            };
+        };
+    };
+};

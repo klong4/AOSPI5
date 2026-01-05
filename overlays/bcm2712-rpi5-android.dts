@@ -1,0 +1,381 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Raspberry Pi 5 Android Device Tree
+ * Copyright (C) 2024 AOSPI5 Project
+ */
+
+/dts-v1/;
+
+#include "bcm2712.dtsi"
+#include "bcm2712-rpi.dtsi"
+
+/ {
+    compatible = "raspberrypi,5-model-b", "brcm,bcm2712";
+    model = "Raspberry Pi 5 Model B (Android)";
+
+    aliases {
+        serial0 = &uart10;
+        serial1 = &uart0;
+        serial2 = &uart2;
+        serial3 = &uart3;
+        serial4 = &uart4;
+        i2c0 = &i2c0;
+        i2c1 = &i2c1;
+        i2c3 = &i2c3;
+        spi0 = &spi0;
+        spi3 = &spi3;
+        spi5 = &spi5;
+        gpio = &gpio;
+        ethernet0 = &genet;
+        mmc0 = &sdio1;  /* SD card */
+        mmc1 = &sdio2;  /* eMMC (if present) */
+    };
+
+    chosen {
+        bootargs = "coherent_pool=1M 8250.nr_uarts=1 cma=64M androidboot.hardware=rpi5 androidboot.selinux=permissive";
+        stdout-path = "serial0:115200n8";
+    };
+
+    memory@0 {
+        device_type = "memory";
+        /* Will be updated by bootloader based on installed RAM */
+        reg = <0x0 0x0 0x0 0x80000000>;  /* 2GB default */
+    };
+
+    /* Android reserved memory regions */
+    reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+
+        /* CMA region for multimedia */
+        linux,cma {
+            compatible = "shared-dma-pool";
+            reusable;
+            size = <0x0 0x10000000>;  /* 256MB */
+            alignment = <0x0 0x1000>;
+            linux,cma-default;
+        };
+
+        /* Reserved for GPU */
+        gpu_mem: gpu@3c000000 {
+            reg = <0x0 0x3c000000 0x0 0x04000000>;  /* 64MB */
+            no-map;
+        };
+
+        /* Reserved for secure world */
+        secure_mem: secure@38000000 {
+            reg = <0x0 0x38000000 0x0 0x04000000>;  /* 64MB */
+            no-map;
+        };
+    };
+
+    /* Android LEDs */
+    leds {
+        compatible = "gpio-leds";
+        pinctrl-names = "default";
+
+        led-act {
+            label = "ACT";
+            gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
+            linux,default-trigger = "mmc0";
+        };
+
+        led-pwr {
+            label = "PWR";
+            gpios = <&gpio 43 GPIO_ACTIVE_LOW>;
+            default-state = "on";
+        };
+    };
+
+    /* Power supply for Android */
+    vdd_5v: vdd-5v {
+        compatible = "regulator-fixed";
+        regulator-name = "5V_SUPPLY";
+        regulator-min-microvolt = <5000000>;
+        regulator-max-microvolt = <5000000>;
+        regulator-always-on;
+    };
+
+    vdd_3v3: vdd-3v3 {
+        compatible = "regulator-fixed";
+        regulator-name = "3V3_SUPPLY";
+        regulator-min-microvolt = <3300000>;
+        regulator-max-microvolt = <3300000>;
+        regulator-always-on;
+        vin-supply = <&vdd_5v>;
+    };
+
+    /* Android virtual keys for GPIO buttons */
+    gpio_keys: gpio-keys {
+        compatible = "gpio-keys";
+        
+        /* Power button (optional external) */
+        button-power {
+            label = "Power";
+            linux,code = <KEY_POWER>;
+            gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
+            wakeup-source;
+        };
+    };
+
+    /* HDMI audio */
+    hdmi0_audio: hdmi0-audio {
+        compatible = "hdmi-audio-codec";
+        hdmi-phandle = <&hdmi0>;
+        status = "okay";
+    };
+
+    hdmi1_audio: hdmi1-audio {
+        compatible = "hdmi-audio-codec";
+        hdmi-phandle = <&hdmi1>;
+        status = "okay";
+    };
+
+    /* Sound card for Android */
+    sound {
+        compatible = "simple-audio-card";
+        simple-audio-card,name = "Pi5-Audio";
+
+        simple-audio-card,dai-link@0 {
+            format = "i2s";
+            cpu {
+                sound-dai = <&i2s>;
+            };
+            codec {
+                sound-dai = <&hdmi0_audio>;
+            };
+        };
+    };
+};
+
+/* CPU configuration for Android */
+&cpu0 {
+    cpu-supply = <&vdd_cpu>;
+    operating-points-v2 = <&cpu_opp_table>;
+};
+
+&cpu1 {
+    cpu-supply = <&vdd_cpu>;
+    operating-points-v2 = <&cpu_opp_table>;
+};
+
+&cpu2 {
+    cpu-supply = <&vdd_cpu>;
+    operating-points-v2 = <&cpu_opp_table>;
+};
+
+&cpu3 {
+    cpu-supply = <&vdd_cpu>;
+    operating-points-v2 = <&cpu_opp_table>;
+};
+
+/* CPU frequency table */
+cpu_opp_table: opp-table {
+    compatible = "operating-points-v2";
+    opp-shared;
+
+    opp-600000000 {
+        opp-hz = /bits/ 64 <600000000>;
+        opp-microvolt = <800000>;
+        clock-latency-ns = <200000>;
+    };
+
+    opp-900000000 {
+        opp-hz = /bits/ 64 <900000000>;
+        opp-microvolt = <850000>;
+        clock-latency-ns = <200000>;
+    };
+
+    opp-1200000000 {
+        opp-hz = /bits/ 64 <1200000000>;
+        opp-microvolt = <900000>;
+        clock-latency-ns = <200000>;
+    };
+
+    opp-1500000000 {
+        opp-hz = /bits/ 64 <1500000000>;
+        opp-microvolt = <950000>;
+        clock-latency-ns = <200000>;
+    };
+
+    opp-1800000000 {
+        opp-hz = /bits/ 64 <1800000000>;
+        opp-microvolt = <1000000>;
+        clock-latency-ns = <200000>;
+    };
+
+    opp-2000000000 {
+        opp-hz = /bits/ 64 <2000000000>;
+        opp-microvolt = <1050000>;
+        clock-latency-ns = <200000>;
+    };
+
+    opp-2400000000 {
+        opp-hz = /bits/ 64 <2400000000>;
+        opp-microvolt = <1100000>;
+        clock-latency-ns = <200000>;
+        turbo-mode;
+    };
+};
+
+/* GPU configuration */
+&gpu {
+    status = "okay";
+};
+
+&v3d {
+    status = "okay";
+};
+
+/* Display outputs */
+&hdmi0 {
+    status = "okay";
+};
+
+&hdmi1 {
+    status = "okay";
+};
+
+/* DSI display */
+&dsi0 {
+    status = "disabled";  /* Enable when DSI display is connected */
+};
+
+&dsi1 {
+    status = "disabled";
+};
+
+/* Camera interfaces */
+&csi0 {
+    status = "disabled";  /* Enable when camera is connected */
+};
+
+&csi1 {
+    status = "disabled";
+};
+
+/* GPIO for Android */
+&gpio {
+    status = "okay";
+
+    /* Android GPIO configuration */
+    android-gpio {
+        gpio-hog;
+        /* Reserve pins for Android GPIO HAL */
+        /* User-accessible GPIOs on 40-pin header */
+    };
+};
+
+/* I2C buses */
+&i2c0 {
+    status = "okay";
+    pinctrl-names = "default";
+    clock-frequency = <100000>;
+};
+
+&i2c1 {
+    status = "okay";
+    pinctrl-names = "default";
+    clock-frequency = <100000>;
+};
+
+/* SPI buses */
+&spi0 {
+    status = "okay";
+    pinctrl-names = "default";
+
+    spidev0: spidev@0 {
+        compatible = "rohm,dh2228fv";
+        reg = <0>;
+        spi-max-frequency = <50000000>;
+    };
+
+    spidev1: spidev@1 {
+        compatible = "rohm,dh2228fv";
+        reg = <1>;
+        spi-max-frequency = <50000000>;
+    };
+};
+
+/* UART */
+&uart0 {
+    status = "okay";
+    pinctrl-names = "default";
+};
+
+&uart10 {
+    status = "okay";
+};
+
+/* PWM */
+&pwm0 {
+    status = "okay";
+    pinctrl-names = "default";
+};
+
+&pwm1 {
+    status = "okay";
+    pinctrl-names = "default";
+};
+
+/* SD card */
+&sdio1 {
+    status = "okay";
+    bus-width = <4>;
+    max-frequency = <100000000>;
+    cap-sd-highspeed;
+    sd-uhs-sdr50;
+    sd-uhs-sdr104;
+    vmmc-supply = <&vdd_3v3>;
+    vqmmc-supply = <&vdd_3v3>;
+};
+
+/* USB */
+&usb {
+    status = "okay";
+    dr_mode = "host";
+};
+
+&xhci {
+    status = "okay";
+};
+
+/* Ethernet */
+&genet {
+    status = "okay";
+    phy-handle = <&phy1>;
+    phy-mode = "rgmii-rxid";
+};
+
+/* PCIe for NVMe */
+&pcie0 {
+    status = "okay";
+    
+    pcie@0,0 {
+        /* NVMe support */
+        #address-cells = <3>;
+        #size-cells = <2>;
+    };
+};
+
+/* Thermal */
+&thermal {
+    status = "okay";
+};
+
+/* Watchdog */
+&watchdog {
+    status = "okay";
+    timeout-sec = <15>;
+};
+
+/* I2S audio */
+&i2s {
+    status = "okay";
+};
+
+/* RNG for Android security */
+&rng {
+    status = "okay";
+};

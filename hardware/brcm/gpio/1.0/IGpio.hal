@@ -1,0 +1,163 @@
+/*
+ * Copyright (C) 2024 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package android.hardware.gpio@1.0;
+
+/**
+ * GPIO HAL interface for Raspberry Pi
+ */
+
+enum Status : int32_t {
+    OK = 0,
+    ERROR = 1,
+    INVALID_PIN = 2,
+    NOT_FOUND = 3,
+    ALREADY_EXISTS = 4,
+    NOT_INITIALIZED = 5,
+    INVALID_OPERATION = 6,
+    TIMEOUT = 7,
+    PERMISSION_DENIED = 8
+};
+
+enum Direction : int32_t {
+    INPUT = 0,
+    OUTPUT = 1
+};
+
+enum PullMode : int32_t {
+    NONE = 0,
+    PULL_UP = 1,
+    PULL_DOWN = 2
+};
+
+enum EdgeTrigger : int32_t {
+    NONE = 0,
+    RISING = 1,
+    FALLING = 2,
+    BOTH = 3
+};
+
+enum PinCapability : int32_t {
+    INPUT = 0x01,
+    OUTPUT = 0x02,
+    PWM = 0x04,
+    I2C = 0x08,
+    SPI = 0x10,
+    UART = 0x20,
+    INTERRUPT = 0x40
+};
+
+struct PinInfo {
+    int32_t pin;
+    string name;
+    int32_t capabilities;  // Bitmask of PinCapability
+};
+
+interface IGpio {
+    /**
+     * Export a GPIO pin for use
+     * @param pin The GPIO pin number (BCM numbering)
+     * @return status Operation result
+     */
+    exportPin(int32_t pin) generates (Status status);
+
+    /**
+     * Unexport a GPIO pin
+     * @param pin The GPIO pin number
+     * @return status Operation result
+     */
+    unexportPin(int32_t pin) generates (Status status);
+
+    /**
+     * Set the direction of a GPIO pin
+     * @param pin The GPIO pin number
+     * @param direction INPUT or OUTPUT
+     * @return status Operation result
+     */
+    setDirection(int32_t pin, Direction direction) generates (Status status);
+
+    /**
+     * Get the direction of a GPIO pin
+     * @param pin The GPIO pin number
+     * @return status Operation result
+     * @return direction Current direction
+     */
+    getDirection(int32_t pin) generates (Status status, Direction direction);
+
+    /**
+     * Set the value of a GPIO pin (must be OUTPUT)
+     * @param pin The GPIO pin number
+     * @param value true for HIGH, false for LOW
+     * @return status Operation result
+     */
+    setValue(int32_t pin, bool value) generates (Status status);
+
+    /**
+     * Get the value of a GPIO pin
+     * @param pin The GPIO pin number
+     * @return status Operation result
+     * @return value Current pin value
+     */
+    getValue(int32_t pin) generates (Status status, bool value);
+
+    /**
+     * Set the pull mode of a GPIO pin
+     * @param pin The GPIO pin number
+     * @param mode Pull mode (NONE, PULL_UP, PULL_DOWN)
+     * @return status Operation result
+     */
+    setPullMode(int32_t pin, PullMode mode) generates (Status status);
+
+    /**
+     * Get the pull mode of a GPIO pin
+     * @param pin The GPIO pin number
+     * @return status Operation result
+     * @return mode Current pull mode
+     */
+    getPullMode(int32_t pin) generates (Status status, PullMode mode);
+
+    /**
+     * Set edge trigger for interrupts
+     * @param pin The GPIO pin number
+     * @param trigger Edge trigger mode
+     * @return status Operation result
+     */
+    setEdgeTrigger(int32_t pin, EdgeTrigger trigger) generates (Status status);
+
+    /**
+     * Wait for an edge event
+     * @param pin The GPIO pin number
+     * @param timeoutMs Timeout in milliseconds (-1 for infinite)
+     * @return status Operation result
+     * @return trigger The detected edge
+     */
+    waitForEdge(int32_t pin, int64_t timeoutMs) generates (Status status, EdgeTrigger trigger);
+
+    /**
+     * Get information about a GPIO pin
+     * @param pin The GPIO pin number
+     * @return status Operation result
+     * @return info Pin information
+     */
+    getPinInfo(int32_t pin) generates (Status status, PinInfo info);
+
+    /**
+     * List all available GPIO pins
+     * @return status Operation result
+     * @return pins Array of available pin numbers
+     */
+    listPins() generates (Status status, vec<int32_t> pins);
+};

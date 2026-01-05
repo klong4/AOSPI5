@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Local manifest for Raspberry Pi 5 Android build
+  Place this file in .repo/local_manifests/
+-->
+<manifest>
+
+  <!-- Remove conflicting projects -->
+  <remove-project name="device/generic/goldfish" />
+  
+  <!-- Device configuration -->
+  <project path="device/brcm/rpi5" name="aospi5/device_brcm_rpi5" remote="github" revision="main" />
+  
+  <!-- Hardware HALs -->
+  <project path="hardware/brcm" name="aospi5/hardware_brcm" remote="github" revision="main" />
+  
+  <!-- Kernel -->
+  <project path="kernel/brcm/rpi5" name="aospi5/kernel_brcm_rpi5" remote="github" revision="main" />
+  
+  <!-- Vendor files -->
+  <project path="vendor/brcm/rpi5" name="aospi5/vendor_brcm_rpi5" remote="github" revision="main" />
+  
+  <!-- Mesa graphics driver -->
+  <project path="external/mesa3d" name="aospi5/external_mesa3d" remote="github" revision="main" />
+  
+  <!-- DRM HWComposer -->
+  <project path="external/drm_hwcomposer" name="AylaAsia-ZhiqinChen/external_drm_hwcomposer" remote="github" revision="main" />
+  
+  <!-- Minigbm gralloc -->
+  <project path="external/minigbm" name="AylaAsia-ZhiqinChen/external_minigbm" remote="github" revision="main" />
+  
+  <!-- libcamera for camera HAL -->
+  <project path="external/libcamera" name="AylaAsia-ZhiqinChen/external_libcamera" remote="github" revision="main" />
+  
+  <!-- V4L2 codec components -->
+  <project path="external/v4l2_codec2" name="AylaAsia-ZhiqinChen/external_v4l2_codec2" remote="github" revision="main" />
+  
+  <!-- Raspberry Pi firmware -->
+  <project path="vendor/brcm/firmware" name="AylaAsia-ZhiqinChen/vendor_brcm_firmware" remote="github" revision="main" />
+
+  <!-- Remote definitions -->
+  <remote name="github" fetch="https://github.com/" />
+  <remote name="aospi5" fetch="https://github.com/aospi5/" />
+
+</manifest>

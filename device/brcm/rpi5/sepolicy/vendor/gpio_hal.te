@@ -1,0 +1,23 @@
+# GPIO HAL SELinux Policy
+
+# Allow GPIO HAL to be a HAL server
+hal_server_domain(gpio_hal, hal_gpio)
+
+# Init can start GPIO HAL
+init_daemon_domain(gpio_hal)
+
+# Allow access to GPIO devices
+allow gpio_hal gpio_device:chr_file rw_file_perms;
+
+# Allow access to GPIO sysfs
+allow gpio_hal sysfs_gpio:dir r_dir_perms;
+allow gpio_hal sysfs_gpio:file rw_file_perms;
+
+# Allow hwbinder communication
+hwbinder_use(gpio_hal)
+
+# Allow logging
+allow gpio_hal log_device:chr_file rw_file_perms;
+
+# Allow reading system properties
+get_prop(gpio_hal, hwservicemanager_prop)

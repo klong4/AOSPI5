@@ -1,0 +1,31 @@
+From: AOSPI5 Project
+Subject: [PATCH] Add Android-specific features for Raspberry Pi 5
+
+This patch adds Android-specific kernel modifications for BCM2712 SoC.
+
+---
+ drivers/staging/android/Kconfig  |   1 +
+ drivers/staging/android/Makefile |   1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/staging/android/Kconfig b/drivers/staging/android/Kconfig
+index xxx..yyy 100644
+--- a/drivers/staging/android/Kconfig
++++ b/drivers/staging/android/Kconfig
+@@ -14,6 +14,7 @@ config ASHMEM
+ 	  It is, in theory, a good memory allocator for low-memory devices,
+ 	  because it can discard shared memory units when under memory pressure.
+ 
++source "drivers/staging/android/ion/Kconfig"
+ 
+ config ANDROID_VSOC
+ 	tristate "Android Virtual SoC support"
+diff --git a/drivers/staging/android/Makefile b/drivers/staging/android/Makefile
+index xxx..yyy 100644
+--- a/drivers/staging/android/Makefile
++++ b/drivers/staging/android/Makefile
+@@ -4,3 +4,4 @@ ccflags-y += -I$(src)			# needed for trace events
+ obj-$(CONFIG_ASHMEM)			+= ashmem.o
+ obj-$(CONFIG_ANDROID_VSOC)		+= vsoc.o
++obj-$(CONFIG_ION)			+= ion/
+--

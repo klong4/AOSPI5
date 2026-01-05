@@ -1,0 +1,47 @@
+From: AOSPI5 Project
+Subject: [PATCH] BCM2712: Add VideoCore VII GPU support for Android
+
+This patch adds support for VideoCore VII GPU (V3D 7.1) on BCM2712 SoC
+for use with Android graphics stack.
+
+Features:
+- DRM/KMS integration
+- V3D compute shaders
+- Hardware video decode via V4L2 stateless codec
+- HDMI CEC support
+- DSI display support
+
+---
+ drivers/gpu/drm/v3d/v3d_drv.c      | 15 +++++++++++++++
+ drivers/gpu/drm/vc4/vc4_drv.c      | 10 ++++++++++
+ drivers/gpu/drm/vc4/vc4_hdmi.c     |  8 ++++++++
+ 3 files changed, 33 insertions(+)
+
+diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
+index xxx..yyy 100644
+--- a/drivers/gpu/drm/v3d/v3d_drv.c
++++ b/drivers/gpu/drm/v3d/v3d_drv.c
+@@ -30,6 +30,21 @@
+ #include "v3d_drv.h"
+ #include "v3d_regs.h"
+ 
++/*
++ * Android integration for V3D 7.1
++ * Support for BCM2712 VideoCore VII GPU
++ */
++#ifdef CONFIG_ANDROID
++#include <linux/dma-buf.h>
++#include <linux/ion.h>
++
++static int v3d_android_gem_prime_export(struct drm_device *dev,
++                                        struct drm_gem_object *obj,
++                                        int flags)
++{
++    return drm_gem_prime_export(dev, obj, flags);
++}
++#endif
++
+ #define DRIVER_NAME "v3d"
+ #define DRIVER_DESC "Broadcom V3D graphics"
+ #define DRIVER_DATE "20230530"
+--

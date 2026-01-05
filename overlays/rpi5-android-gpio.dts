@@ -1,0 +1,112 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Device Tree Overlay for Raspberry Pi 5 GPIO configuration
+ * Enables GPIO for Android HAL access
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/bcm2835.h>
+
+/ {
+    compatible = "raspberrypi,5-model-b", "brcm,bcm2712";
+
+    fragment@0 {
+        target = <&gpio>;
+        __overlay__ {
+            /* 40-pin header GPIO configuration for Android */
+
+            /* I2C1 - Pins 3 (SDA), 5 (SCL) */
+            i2c1_pins: i2c1-pins {
+                brcm,pins = <2 3>;
+                brcm,function = <BCM2835_FSEL_ALT0>;
+                brcm,pull = <BCM2835_PUD_UP>;
+            };
+
+            /* SPI0 - Pins 19 (MOSI), 21 (MISO), 23 (SCLK), 24 (CE0), 26 (CE1) */
+            spi0_pins: spi0-pins {
+                brcm,pins = <10 9 11 8 7>;
+                brcm,function = <BCM2835_FSEL_ALT0>;
+            };
+
+            /* UART0 - Pins 8 (TXD), 10 (RXD) */
+            uart0_pins: uart0-pins {
+                brcm,pins = <14 15>;
+                brcm,function = <BCM2835_FSEL_ALT0>;
+                brcm,pull = <BCM2835_PUD_OFF BCM2835_PUD_UP>;
+            };
+
+            /* PWM0 - Pin 12 (GPIO18) */
+            pwm0_pins: pwm0-pins {
+                brcm,pins = <18>;
+                brcm,function = <BCM2835_FSEL_ALT5>;
+            };
+
+            /* PWM1 - Pin 33 (GPIO13) */
+            pwm1_pins: pwm1-pins {
+                brcm,pins = <13>;
+                brcm,function = <BCM2835_FSEL_ALT0>;
+            };
+
+            /* PCM/I2S - Pins 12 (BCLK), 35 (LRCK), 38 (DIN), 40 (DOUT) */
+            i2s_pins: i2s-pins {
+                brcm,pins = <18 19 20 21>;
+                brcm,function = <BCM2835_FSEL_ALT0>;
+            };
+
+            /* General purpose GPIO (exposed on header) */
+            android_gpio: android-gpio {
+                brcm,pins = <4 5 6 12 13 16 17 19 20 21 22 23 24 25 26 27>;
+                brcm,function = <BCM2835_FSEL_GPIO_IN>;
+                brcm,pull = <BCM2835_PUD_OFF>;
+            };
+        };
+    };
+
+    fragment@1 {
+        target = <&i2c1>;
+        __overlay__ {
+            pinctrl-names = "default";
+            pinctrl-0 = <&i2c1_pins>;
+            status = "okay";
+        };
+    };
+
+    fragment@2 {
+        target = <&spi0>;
+        __overlay__ {
+            pinctrl-names = "default";
+            pinctrl-0 = <&spi0_pins>;
+            status = "okay";
+        };
+    };
+
+    fragment@3 {
+        target = <&uart0>;
+        __overlay__ {
+            pinctrl-names = "default";
+            pinctrl-0 = <&uart0_pins>;
+            status = "okay";
+        };
+    };
+
+    fragment@4 {
+        target = <&pwm0>;
+        __overlay__ {
+            pinctrl-names = "default";
+            pinctrl-0 = <&pwm0_pins>;
+            status = "okay";
+        };
+    };
+
+    fragment@5 {
+        target = <&i2s>;
+        __overlay__ {
+            pinctrl-names = "default";
+            pinctrl-0 = <&i2s_pins>;
+            status = "okay";
+        };
+    };
+};

@@ -1,0 +1,210 @@
+#
+# Copyright (C) 2024 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Board Configuration for Raspberry Pi 5
+
+DEVICE_PATH := device/brcm/rpi5
+
+# Architecture
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-2a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 :=
+TARGET_CPU_VARIANT := cortex-a76
+
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv8-a
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+TARGET_2ND_CPU_VARIANT := cortex-a76
+
+# Bootloader
+TARGET_BOOTLOADER_BOARD_NAME := rpi5
+TARGET_NO_BOOTLOADER := true
+TARGET_NO_RADIOIMAGE := true
+
+# Kernel
+BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_PAGESIZE := 4096
+BOARD_KERNEL_OFFSET := 0x00080000
+BOARD_RAMDISK_OFFSET := 0x02000000
+BOARD_SECOND_OFFSET := 0x00000000
+BOARD_TAGS_OFFSET := 0x01e00000
+BOARD_DTB_OFFSET := 0x01f00000
+
+BOARD_KERNEL_CMDLINE := coherent_pool=1M 8250.nr_uarts=1
+BOARD_KERNEL_CMDLINE += cma=64M
+BOARD_KERNEL_CMDLINE += video=HDMI-A-1:1920x1080@60
+BOARD_KERNEL_CMDLINE += androidboot.hardware=rpi5
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE += init=/init
+BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor/firmware
+
+BOARD_KERNEL_IMAGE_NAME := Image
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_HEADER_ARCH := arm64
+TARGET_KERNEL_SOURCE := kernel/brcm/rpi5
+TARGET_KERNEL_CONFIG := rpi5_android_defconfig
+TARGET_KERNEL_ADDITIONAL_FLAGS := DTC_EXT=$(shell pwd)/prebuilts/misc/linux-x86/dtc/dtc
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+
+# Kernel modules
+BOARD_VENDOR_KERNEL_MODULES_LOAD := \
+    v3d.ko \
+    vc4.ko \
+    bcm2835-v4l2.ko \
+    snd-soc-hdmi-codec.ko
+
+# Platform
+TARGET_BOARD_PLATFORM := bcm2712
+TARGET_BOARD_PLATFORM_GPU := videocore7
+BOARD_USES_GENERIC_AUDIO := false
+
+# Graphics
+USE_OPENGL_RENDERER := true
+BOARD_GPU_DRIVERS := v3d vc4
+BOARD_MESA3D_USES_MESON_BUILD := true
+BOARD_MESA3D_GALLIUM_DRIVERS := v3d vc4
+BOARD_MESA3D_VULKAN_DRIVERS := broadcom
+
+# Enable DRM/KMS
+TARGET_USES_HWC2 := true
+TARGET_HAS_WIDE_COLOR_DISPLAY := true
+SF_PRIMARY_DISPLAY_ORIENTATION := 0
+
+# Gralloc
+TARGET_USES_GRALLOC1 := true
+BOARD_USES_MINIGBM := true
+BOARD_USES_DRM_HWCOMPOSER := true
+
+# HDMI CEC
+BOARD_HAVE_HDMI_CEC := true
+
+# Audio
+BOARD_USES_ALSA_AUDIO := true
+BOARD_SUPPORTS_SOUND_TRIGGER := false
+BOARD_USES_TINYHAL_AUDIO := true
+USE_XML_AUDIO_POLICY_CONF := 1
+
+# Bluetooth
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_BCM := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
+
+# WiFi
+BOARD_WLAN_DEVICE := bcmdhd
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_HOSTAPD_DRIVER := NL80211
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+WIFI_DRIVER_FW_PATH_PARAM := "/sys/module/bcmdhd/parameters/firmware_path"
+WIFI_DRIVER_FW_PATH_STA := "/vendor/firmware/brcm/brcmfmac43455-sdio.bin"
+WIFI_DRIVER_FW_PATH_AP := "/vendor/firmware/brcm/brcmfmac43455-sdio.bin"
+WIFI_DRIVER_FW_PATH_P2P := "/vendor/firmware/brcm/brcmfmac43455-sdio.bin"
+WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
+
+# Camera
+BOARD_HAVE_CAMERA := true
+USE_CAMERA_STUB := false
+BOARD_CAMERA_USES_V4L2 := true
+
+# SELinux
+BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/public
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
+
+# Partitions
+BOARD_FLASH_BLOCK_SIZE := 4096
+BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864        # 64MB
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 67108864 # 64MB
+BOARD_DTBOIMG_PARTITION_SIZE := 8388608           # 8MB
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2147483648    # 2GB
+BOARD_VENDORIMAGE_PARTITION_SIZE := 536870912     # 512MB
+BOARD_PRODUCTIMAGE_PARTITION_SIZE := 536870912    # 512MB
+BOARD_SYSTEM_EXTIMAGE_PARTITION_SIZE := 268435456 # 256MB
+BOARD_ODMIMAGE_PARTITION_SIZE := 134217728        # 128MB
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 4294967296  # 4GB (expandable)
+BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456      # 256MB
+
+# Partition filesystem types
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+
+# Use sparse images
+TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_USERIMAGES_USE_F2FS := true
+TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
+
+# A/B OTA
+AB_OTA_UPDATER := true
+AB_OTA_PARTITIONS := \
+    boot \
+    dtbo \
+    system \
+    vendor \
+    product \
+    system_ext \
+    odm \
+    vendor_boot
+
+# Super partition
+BOARD_SUPER_PARTITION_SIZE := 4831838208  # 4.5GB
+BOARD_SUPER_PARTITION_GROUPS := rpi5_dynamic_partitions
+BOARD_RPI5_DYNAMIC_PARTITIONS_PARTITION_LIST := system vendor product system_ext odm
+BOARD_RPI5_DYNAMIC_PARTITIONS_SIZE := 4827643904  # SUPER_SIZE - 4MB
+
+# AVB (Android Verified Boot)
+BOARD_AVB_ENABLE := true
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+BOARD_AVB_VBMETA_SYSTEM := system product system_ext
+BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
+BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA2048
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := 0
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
+
+# Recovery
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/fstab.rpi5
+TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+TARGET_RECOVERY_UI_MARGIN_HEIGHT := 50
+BOARD_USES_RECOVERY_AS_BOOT := false
+BOARD_INCLUDE_RECOVERY_DTBO := true
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+
+# Treble
+BOARD_VNDK_VERSION := current
+PRODUCT_FULL_TREBLE_OVERRIDE := true
+BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
+
+# HIDL
+DEVICE_FRAMEWORK_MANIFEST_FILE := $(DEVICE_PATH)/framework_manifest.xml
+DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
+
+# Vendor Interface
+BOARD_VENDOR_INTERFACE := $(DEVICE_PATH)/vendor_interface.xml
+
+# Properties
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
+TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
+
+# Include vendor-specific configurations
+-include vendor/brcm/rpi5/BoardConfigVendor.mk

@@ -1,0 +1,30 @@
+# SELinux policy for Raspberry Pi 5 GPIO HAL
+
+# GPIO HAL domain
+type gpio_hal, domain;
+type gpio_hal_exec, exec_type, vendor_file_type, file_type;
+
+# GPU/DRM domain
+type drm_hwcomposer, domain;
+type drm_hwcomposer_exec, exec_type, vendor_file_type, file_type;
+
+# Camera HAL domain  
+type camera_hal_rpi, domain;
+type camera_hal_rpi_exec, exec_type, vendor_file_type, file_type;
+
+# Thermal HAL domain
+type thermal_hal_rpi, domain;
+type thermal_hal_rpi_exec, exec_type, vendor_file_type, file_type;
+
+# Power HAL domain
+type power_hal_rpi, domain;
+type power_hal_rpi_exec, exec_type, vendor_file_type, file_type;
+
+# File types
+type gpio_device, dev_type;
+type spidev_device, dev_type;
+type i2c_device, dev_type;
+type pwm_device, dev_type;
+type thermal_device, dev_type;
+type dri_device, dev_type;
+type video_device, dev_type;
