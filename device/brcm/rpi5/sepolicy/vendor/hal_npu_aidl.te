@@ -1,0 +1,76 @@
+# Raspberry Pi 5 Neural Processing Unit (NPU) HAL SELinux Policy
+# Supports: Google Coral TPU, Hailo-8/8L/15, Intel NCS2/Myriad, Kneron, etc.
+type hal_npu_rpi5, domain;
+type hal_npu_rpi5_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(hal_npu_rpi5)
+
+# AIDL NPU HAL server
+hal_server_domain(hal_npu_rpi5, hal_npu)
+
+# PCIe device access for NPU accelerators
+allow hal_npu_rpi5 pci_device:chr_file rw_file_perms;
+allow hal_npu_rpi5 pci_device:dir r_dir_perms;
+
+# Google Coral Edge TPU (/dev/apex_*)
+allow hal_npu_rpi5 apex_device:chr_file rw_file_perms;
+
+# Hailo NPU (/dev/hailo*)
+allow hal_npu_rpi5 hailo_device:chr_file rw_file_perms;
+
+# Intel Movidius/Myriad VPU (USB-based)
+allow hal_npu_rpi5 usb_device:chr_file rw_file_perms;
+allow hal_npu_rpi5 usb_device:dir r_dir_perms;
+
+# Generic accelerator device access
+allow hal_npu_rpi5 device:chr_file { read write ioctl open };
+
+# Sysfs access for PCIe enumeration and device info
+allow hal_npu_rpi5 sysfs:file r_file_perms;
+allow hal_npu_rpi5 sysfs:dir r_dir_perms;
+allow hal_npu_rpi5 sysfs_pci:file r_file_perms;
+allow hal_npu_rpi5 sysfs_pci:dir r_dir_perms;
+allow hal_npu_rpi5 sysfs_devices:file r_file_perms;
+allow hal_npu_rpi5 sysfs_devices:dir r_dir_perms;
+
+# DMA buffer access for model data and inference I/O
+allow hal_npu_rpi5 ion_device:chr_file rw_file_perms;
+allow hal_npu_rpi5 dmabuf_system_heap_device:chr_file rw_file_perms;
+allow hal_npu_rpi5 dmabuf_cma_heap_device:chr_file rw_file_perms;
+
+# Access to GPU device for buffer sharing
+allow hal_npu_rpi5 gpu_device:chr_file rw_file_perms;
+
+# Access to vendor configs and model files
+allow hal_npu_rpi5 vendor_configs_file:file r_file_perms;
+allow hal_npu_rpi5 vendor_configs_file:dir r_dir_perms;
+
+# Model file access
+allow hal_npu_rpi5 vendor_npu_model_file:file r_file_perms;
+allow hal_npu_rpi5 vendor_npu_model_file:dir r_dir_perms;
+
+# HwBinder
+hwbinder_use(hal_npu_rpi5)
+
+# Binder for client communication
+binder_use(hal_npu_rpi5)
+
+# Network access for remote inference (if enabled)
+allow hal_npu_rpi5 self:tcp_socket create_stream_socket_perms;
+allow hal_npu_rpi5 self:udp_socket create_socket_perms;
+
+# Memory mapping for model execution
+allow hal_npu_rpi5 self:process execmem;
+
+# Access to proc filesystem for system info
+allow hal_npu_rpi5 proc:file r_file_perms;
+allow hal_npu_rpi5 proc_meminfo:file r_file_perms;
+
+# /dev/mem access for direct hardware access (if needed)
+# allow hal_npu_rpi5 kmem_device:chr_file rw_file_perms;
+
+# Log access
+allow hal_npu_rpi5 logd:unix_stream_socket connectto;
+
+# Netlink for device hotplug events
+allow hal_npu_rpi5 self:netlink_kobject_uevent_socket create_socket_perms;

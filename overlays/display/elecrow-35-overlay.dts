@@ -1,0 +1,102 @@
+/*
+ * Elecrow 3.5" TFT Display (ILI9486) with XPT2046 touch
+ * 480x320 resolution
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&spidev0>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    
+    fragment@1 {
+        target = <&spidev1>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    
+    fragment@2 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            elecrow35: elecrow35@0 {
+                compatible = "ilitek,ili9486";
+                reg = <0>;
+                spi-max-frequency = <32000000>;
+                
+                rotate = <270>;
+                bgr;
+                fps = <30>;
+                buswidth = <8>;
+                
+                dc-gpios = <&gpio 24 0>;
+                reset-gpios = <&gpio 25 0>;
+                led-gpios = <&gpio 18 0>;
+                
+                width = <480>;
+                height = <320>;
+                
+                init = <0x10000b0 0x00
+                        0x1000011
+                        0x20000ff
+                        0x10000d0 0x07 0x42 0x18
+                        0x10000d1 0x00 0x07 0x10
+                        0x10000d2 0x01 0x02
+                        0x10000c0 0x10 0x3b 0x00 0x02 0x11
+                        0x10000c5 0x03
+                        0x10000c8 0x00 0x32 0x36 0x45 0x06 0x16 0x37 0x75 0x77 0x54 0x0c 0x00
+                        0x1000036 0x0a
+                        0x100003a 0x55
+                        0x10000b4 0x11
+                        0x1000029>;
+            };
+            
+            /* XPT2046 Touch Controller */
+            elecrow35_touch: elecrow35_touch@1 {
+                compatible = "ti,ads7846";
+                reg = <1>;
+                spi-max-frequency = <2000000>;
+                
+                interrupt-parent = <&gpio>;
+                interrupts = <17 2>;
+                pendown-gpio = <&gpio 17 1>;
+                
+                ti,x-plate-ohms = /bits/ 16 <60>;
+                ti,pressure-max = /bits/ 16 <255>;
+                
+                ti,x-min = /bits/ 16 <200>;
+                ti,x-max = /bits/ 16 <3900>;
+                ti,y-min = /bits/ 16 <200>;
+                ti,y-max = /bits/ 16 <3900>;
+            };
+        };
+    };
+    
+    fragment@3 {
+        target = <&gpio>;
+        __overlay__ {
+            elecrow35_pins: elecrow35_pins {
+                brcm,pins = <17 18 24 25>;
+                brcm,function = <0 1 1 1>;
+                brcm,pull = <2 0 0 0>;
+            };
+        };
+    };
+    
+    __overrides__ {
+        speed = <&elecrow35>,"spi-max-frequency:0";
+        rotate = <&elecrow35>,"rotate:0";
+        fps = <&elecrow35>,"fps:0";
+    };
+};

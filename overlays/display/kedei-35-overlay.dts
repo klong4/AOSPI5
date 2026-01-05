@@ -1,0 +1,106 @@
+/*
+ * KeDei 3.5" TFT Display (ILI9486/MPI3501)
+ * 480x320 resolution with XPT2046 touch
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&spidev0>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    
+    fragment@1 {
+        target = <&spidev1>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    
+    fragment@2 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            kedei35: kedei35@0 {
+                compatible = "ilitek,ili9486";
+                reg = <0>;
+                spi-max-frequency = <16000000>;
+                
+                rotate = <90>;
+                bgr;
+                fps = <30>;
+                buswidth = <8>;
+                
+                dc-gpios = <&gpio 24 0>;
+                reset-gpios = <&gpio 25 0>;
+                led-gpios = <&gpio 18 0>;
+                
+                width = <480>;
+                height = <320>;
+                
+                /* KeDei specific init sequence */
+                init = <0x10000f1 0x36 0x04 0x00 0x3c 0x0f 0x8f
+                        0x10000f2 0x18 0xa3 0x12 0x02 0xb2 0x12 0xff 0x10 0x00
+                        0x10000f8 0x21 0x04
+                        0x10000f9 0x00 0x08
+                        0x1000036 0x08
+                        0x10000b4 0x00
+                        0x10000c1 0x41
+                        0x10000c5 0x00 0x18
+                        0x10000c0 0x09 0x09
+                        0x10000b6 0x00 0x42 0x3b
+                        0x10000e0 0x00 0x07 0x10 0x09 0x17 0x0b 0x41 0x89 0x4b 0x0a 0x0c 0x0e 0x18 0x1b 0x0f
+                        0x10000e1 0x00 0x17 0x1a 0x04 0x0e 0x06 0x2f 0x45 0x43 0x02 0x0a 0x09 0x32 0x36 0x0f
+                        0x1000011
+                        0x2000096
+                        0x100003a 0x55
+                        0x1000029>;
+            };
+            
+            kedei35_touch: kedei35_touch@1 {
+                compatible = "ti,ads7846";
+                reg = <1>;
+                spi-max-frequency = <2000000>;
+                
+                interrupt-parent = <&gpio>;
+                interrupts = <17 2>;
+                pendown-gpio = <&gpio 17 1>;
+                
+                ti,x-plate-ohms = /bits/ 16 <60>;
+                ti,pressure-max = /bits/ 16 <255>;
+                
+                ti,swap-xy;
+                ti,x-min = /bits/ 16 <150>;
+                ti,x-max = /bits/ 16 <3950>;
+                ti,y-min = /bits/ 16 <150>;
+                ti,y-max = /bits/ 16 <3950>;
+            };
+        };
+    };
+    
+    fragment@3 {
+        target = <&gpio>;
+        __overlay__ {
+            kedei35_pins: kedei35_pins {
+                brcm,pins = <17 18 24 25>;
+                brcm,function = <0 1 1 1>;
+                brcm,pull = <2 0 0 0>;
+            };
+        };
+    };
+    
+    __overrides__ {
+        speed = <&kedei35>,"spi-max-frequency:0";
+        rotate = <&kedei35>,"rotate:0";
+        fps = <&kedei35>,"fps:0";
+    };
+};

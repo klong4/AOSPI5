@@ -1,0 +1,104 @@
+/*
+ * Waveshare 3.5" SPI TFT Display (Type B) - ILI9486
+ * 480x320 resolution with XPT2046 touch
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&spidev0>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    
+    fragment@1 {
+        target = <&spidev1>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    
+    fragment@2 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            waveshare35b: waveshare35b@0 {
+                compatible = "ilitek,ili9486";
+                reg = <0>;
+                spi-max-frequency = <32000000>;
+                
+                rotate = <90>;
+                bgr;
+                fps = <30>;
+                buswidth = <8>;
+                
+                dc-gpios = <&gpio 25 0>;
+                reset-gpios = <&gpio 27 0>;
+                led-gpios = <&gpio 18 0>;
+                
+                width = <480>;
+                height = <320>;
+                
+                init = <0x10000b0 0x00
+                        0x1000011
+                        0x20000ff
+                        0x10000d0 0x07 0x42 0x18
+                        0x10000d1 0x00 0x07 0x10
+                        0x10000d2 0x01 0x02
+                        0x10000c0 0x10 0x3b 0x00 0x02 0x11
+                        0x10000c5 0x03
+                        0x10000c8 0x00 0x32 0x36 0x45 0x06 0x16 0x37 0x75 0x77 0x54 0x0c 0x00
+                        0x1000036 0x0a
+                        0x100003a 0x55
+                        0x10000b4 0x11
+                        0x1000029>;
+            };
+            
+            /* XPT2046 Touch Controller */
+            waveshare35b_touch: waveshare35b_touch@1 {
+                compatible = "ti,ads7846";
+                reg = <1>;
+                spi-max-frequency = <2000000>;
+                
+                interrupt-parent = <&gpio>;
+                interrupts = <17 2>;
+                pendown-gpio = <&gpio 17 1>;
+                
+                ti,x-plate-ohms = /bits/ 16 <60>;
+                ti,pressure-max = /bits/ 16 <255>;
+                
+                ti,swap-xy;
+                ti,x-min = /bits/ 16 <200>;
+                ti,x-max = /bits/ 16 <3900>;
+                ti,y-min = /bits/ 16 <200>;
+                ti,y-max = /bits/ 16 <3900>;
+            };
+        };
+    };
+    
+    fragment@3 {
+        target = <&gpio>;
+        __overlay__ {
+            waveshare35b_pins: waveshare35b_pins {
+                brcm,pins = <17 18 25 27>;
+                brcm,function = <0 1 1 1>;
+                brcm,pull = <2 0 0 0>;
+            };
+        };
+    };
+    
+    __overrides__ {
+        speed = <&waveshare35b>,"spi-max-frequency:0";
+        rotate = <&waveshare35b>,"rotate:0";
+        fps = <&waveshare35b>,"fps:0";
+        swapxy = <&waveshare35b_touch>,"ti,swap-xy?";
+    };
+};

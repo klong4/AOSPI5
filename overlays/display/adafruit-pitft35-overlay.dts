@@ -1,0 +1,88 @@
+/*
+ * Adafruit PiTFT 3.5" (HX8357D) Display Overlay
+ * 480x320 resolution with resistive touch
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&spidev0>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    
+    fragment@1 {
+        target = <&spidev1>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    
+    fragment@2 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            pitft35: pitft35@0 {
+                compatible = "himax,hx8357d";
+                reg = <0>;
+                spi-max-frequency = <32000000>;
+                
+                rotate = <90>;
+                fps = <30>;
+                buswidth = <8>;
+                
+                dc-gpios = <&gpio 25 0>;
+                reset-gpios = <&gpio 24 0>;
+                led-gpios = <&gpio 18 1>;
+                
+                width = <480>;
+                height = <320>;
+            };
+            
+            /* STMPE610 Touch Controller */
+            pitft35_touch: pitft35_touch@1 {
+                compatible = "st,stmpe610";
+                reg = <1>;
+                spi-max-frequency = <1000000>;
+                
+                interrupt-parent = <&gpio>;
+                interrupts = <24 2>;
+                
+                st,sample-time = <4>;
+                st,mod-12b = <1>;
+                st,ref-sel = <0>;
+                st,adc-freq = <1>;
+                st,ave-ctrl = <3>;
+                st,touch-det-delay = <3>;
+                st,settling = <4>;
+                st,fraction-z = <7>;
+                st,i-drive = <1>;
+            };
+        };
+    };
+    
+    fragment@3 {
+        target = <&gpio>;
+        __overlay__ {
+            pitft35_pins: pitft35_pins {
+                brcm,pins = <18 24 25>;
+                brcm,function = <1 0 1>;
+                brcm,pull = <0 2 0>;
+            };
+        };
+    };
+    
+    __overrides__ {
+        speed = <&pitft35>,"spi-max-frequency:0";
+        rotate = <&pitft35>,"rotate:0";
+        fps = <&pitft35>,"fps:0";
+    };
+};

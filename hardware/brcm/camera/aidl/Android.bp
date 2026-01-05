@@ -1,0 +1,72 @@
+// Copyright (C) 2024 The Android Open Source Project
+// SPDX-License-Identifier: Apache-2.0
+
+cc_library_shared {
+    name: "android.hardware.camera.provider-impl.rpi5",
+    vendor: true,
+    relative_install_path: "hw",
+    
+    srcs: [
+        "Camera.cpp",
+    ],
+    
+    shared_libs: [
+        "libbase",
+        "libbinder_ndk",
+        "libcutils",
+        "liblog",
+        "libutils",
+        "libhardware",
+        "android.hardware.camera.provider-V2-ndk",
+        "android.hardware.camera.device-V2-ndk",
+        "android.hardware.camera.common-V1-ndk",
+        "android.hardware.camera.metadata-V2-ndk",
+        "android.hardware.graphics.mapper@4.0",
+    ],
+    
+    static_libs: [
+        "android.hardware.camera.common@1.0-helper",
+    ],
+    
+    header_libs: [
+        "libhardware_headers",
+    ],
+    
+    cflags: [
+        "-Wall",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-DLOG_TAG=\"CameraHAL\"",
+    ],
+    
+    local_include_dirs: [
+        ".",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.camera.provider-service.rpi5",
+    vendor: true,
+    relative_install_path: "hw",
+    init_rc: ["android.hardware.camera.provider-service.rpi5.rc"],
+    vintf_fragments: ["android.hardware.camera.provider-service.rpi5.xml"],
+    
+    srcs: [
+        "service.cpp",
+    ],
+    
+    shared_libs: [
+        "libbase",
+        "libbinder_ndk",
+        "libcutils",
+        "liblog",
+        "libutils",
+        "android.hardware.camera.provider-V2-ndk",
+        "android.hardware.camera.provider-impl.rpi5",
+    ],
+    
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+}

@@ -1,0 +1,80 @@
+/*
+ * Pi Global Shutter Camera (IMX296) Device Tree Overlay
+ * Raspberry Pi 5 - MIPI CSI-2 - 1.58MP Global Shutter
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&i2c_csi_dsi0>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+            
+            imx296: imx296@1a {
+                compatible = "sony,imx296";
+                reg = <0x1a>;
+                status = "okay";
+                
+                clocks = <&cam0_clk>;
+                clock-names = "inck";
+                
+                VANA-supply = <&cam0_reg>;
+                VDIG-supply = <&cam_dummy_reg>;
+                VDDL-supply = <&cam_dummy_reg>;
+                
+                rotation = <180>;
+                orientation = <2>;
+                
+                port {
+                    imx296_0: endpoint {
+                        remote-endpoint = <&csi0_ep>;
+                        clock-lanes = <0>;
+                        data-lanes = <1>;
+                        link-frequencies = /bits/ 64 <594000000>;
+                    };
+                };
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&csi0>;
+        __overlay__ {
+            status = "okay";
+            
+            port {
+                csi0_ep: endpoint {
+                    remote-endpoint = <&imx296_0>;
+                    data-lanes = <1>;
+                };
+            };
+        };
+    };
+    
+    fragment@2 {
+        target = <&i2c0if>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+    
+    fragment@3 {
+        target = <&i2c0mux>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+    
+    __overrides__ {
+        rotation = <&imx296>,"rotation:0";
+        orientation = <&imx296>,"orientation:0";
+        media-controller = <&csi0>,"brcm,media-controller?";
+        cam0 = <&imx296>, "status";
+    };
+};

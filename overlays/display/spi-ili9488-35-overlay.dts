@@ -1,0 +1,80 @@
+/*
+ * Generic 3.5" ILI9488 SPI TFT Display
+ * 480x320 resolution, 18-bit color
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&spidev0>;
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+    
+    fragment@1 {
+        target = <&spi0>;
+        __overlay__ {
+            status = "okay";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            
+            ili9488: ili9488@0 {
+                compatible = "ilitek,ili9488";
+                reg = <0>;
+                spi-max-frequency = <64000000>;
+                
+                rotate = <90>;
+                bgr;
+                fps = <30>;
+                buswidth = <8>;
+                
+                dc-gpios = <&gpio 25 0>;
+                reset-gpios = <&gpio 27 0>;
+                led-gpios = <&gpio 18 0>;
+                
+                width = <480>;
+                height = <320>;
+                
+                /* ILI9488 initialization sequence */
+                init = <0x10000e0 0x00 0x03 0x09 0x08 0x16 0x0a 0x3f 0x78 0x4c 0x09 0x0a 0x08 0x16 0x1a 0x0f
+                        0x10000e1 0x00 0x16 0x19 0x03 0x0f 0x05 0x32 0x45 0x46 0x04 0x0e 0x0d 0x35 0x37 0x0f
+                        0x10000c0 0x17 0x15
+                        0x10000c1 0x41
+                        0x10000c5 0x00 0x12 0x80
+                        0x1000036 0x48
+                        0x10000b0 0x00
+                        0x10000b1 0xa0
+                        0x10000b4 0x02
+                        0x10000b6 0x02 0x02
+                        0x10000e9 0x00
+                        0x10000f7 0xa9 0x51 0x2c 0x82
+                        0x100003a 0x66
+                        0x1000011
+                        0x2000078
+                        0x1000029>;
+            };
+        };
+    };
+    
+    fragment@2 {
+        target = <&gpio>;
+        __overlay__ {
+            ili9488_pins: ili9488_pins {
+                brcm,pins = <18 25 27>;
+                brcm,function = <1 1 1>;
+            };
+        };
+    };
+    
+    __overrides__ {
+        speed = <&ili9488>,"spi-max-frequency:0";
+        rotate = <&ili9488>,"rotate:0";
+        fps = <&ili9488>,"fps:0";
+        debug = <&ili9488>,"debug:0";
+    };
+};

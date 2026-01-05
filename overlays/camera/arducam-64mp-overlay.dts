@@ -1,0 +1,91 @@
+/*
+ * Arducam 16MP Autofocus Camera (IMX519) Device Tree Overlay
+ * Raspberry Pi 5 - MIPI CSI-2 - 16MP with PDAF
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&i2c_csi_dsi0>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+            
+            arducam_64mp: arducam_64mp@1a {
+                compatible = "arducam,imx519";
+                reg = <0x1a>;
+                status = "okay";
+                
+                clocks = <&cam0_clk>;
+                clock-names = "xclk";
+                
+                VANA-supply = <&cam0_reg>;
+                VDIG-supply = <&cam_dummy_reg>;
+                VDDL-supply = <&cam_dummy_reg>;
+                
+                rotation = <0>;
+                orientation = <2>;
+                
+                lens-focus = <&arducam_vcm>;
+                
+                port {
+                    arducam_64mp_0: endpoint {
+                        remote-endpoint = <&csi0_ep>;
+                        clock-lanes = <0>;
+                        data-lanes = <1 2>;
+                        clock-noncontinuous;
+                        link-frequencies = /bits/ 64 <493500000>;
+                    };
+                };
+            };
+            
+            arducam_vcm: dw9817@c {
+                compatible = "dongwoon,dw9817";
+                reg = <0x0c>;
+                status = "okay";
+                VANA-supply = <&cam0_reg>;
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&csi0>;
+        __overlay__ {
+            status = "okay";
+            
+            port {
+                csi0_ep: endpoint {
+                    remote-endpoint = <&arducam_64mp_0>;
+                    data-lanes = <1 2>;
+                };
+            };
+        };
+    };
+    
+    fragment@2 {
+        target = <&i2c0if>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+    
+    fragment@3 {
+        target = <&i2c0mux>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+    
+    __overrides__ {
+        rotation = <&arducam_64mp>,"rotation:0";
+        orientation = <&arducam_64mp>,"orientation:0";
+        media-controller = <&csi0>,"brcm,media-controller?";
+        cam0 = <&arducam_64mp>, "status",
+               <&arducam_vcm>, "status";
+    };
+};

@@ -1,0 +1,81 @@
+/*
+ * Pi Camera Module v2 (IMX219) Device Tree Overlay
+ * Raspberry Pi 5 - MIPI CSI-2
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2712";
+    
+    fragment@0 {
+        target = <&i2c_csi_dsi0>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+            
+            imx219: imx219@10 {
+                compatible = "sony,imx219";
+                reg = <0x10>;
+                status = "okay";
+                
+                clocks = <&cam0_clk>;
+                clock-names = "xclk";
+                
+                VANA-supply = <&cam0_reg>;
+                VDIG-supply = <&cam_dummy_reg>;
+                VDDL-supply = <&cam_dummy_reg>;
+                
+                rotation = <180>;
+                orientation = <2>;
+                
+                port {
+                    imx219_0: endpoint {
+                        remote-endpoint = <&csi0_ep>;
+                        clock-lanes = <0>;
+                        data-lanes = <1 2>;
+                        clock-noncontinuous;
+                        link-frequencies = /bits/ 64 <456000000>;
+                    };
+                };
+            };
+        };
+    };
+    
+    fragment@1 {
+        target = <&csi0>;
+        __overlay__ {
+            status = "okay";
+            
+            port {
+                csi0_ep: endpoint {
+                    remote-endpoint = <&imx219_0>;
+                    data-lanes = <1 2>;
+                };
+            };
+        };
+    };
+    
+    fragment@2 {
+        target = <&i2c0if>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+    
+    fragment@3 {
+        target = <&i2c0mux>;
+        __overlay__ {
+            status = "okay";
+        };
+    };
+    
+    __overrides__ {
+        rotation = <&imx219>,"rotation:0";
+        orientation = <&imx219>,"orientation:0";
+        media-controller = <&csi0>,"brcm,media-controller?";
+        cam0 = <&imx219>, "status";
+    };
+};
