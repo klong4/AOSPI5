@@ -1,0 +1,5 @@
+service vendor.power.rpi5 /vendor/bin/hw/android.hardware.power-service.rpi5
+    class hal
+    user system
+    group system
+    capabilities SYS_NICE

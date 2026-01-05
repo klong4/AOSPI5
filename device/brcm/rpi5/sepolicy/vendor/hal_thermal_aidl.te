@@ -1,0 +1,22 @@
+# SELinux policy for AIDL Thermal HAL - Android 16
+# Raspberry Pi 5
+
+type hal_thermal_rpi5, domain;
+type hal_thermal_rpi5_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(hal_thermal_rpi5)
+binder_use(hal_thermal_rpi5)
+
+# Allow Thermal HAL to serve AIDL interface
+hal_server_domain(hal_thermal_rpi5, hal_thermal)
+
+# Read thermal zones
+allow hal_thermal_rpi5 sysfs_thermal:dir r_dir_perms;
+allow hal_thermal_rpi5 sysfs_thermal:file r_file_perms;
+allow hal_thermal_rpi5 sysfs:dir r_dir_perms;
+allow hal_thermal_rpi5 sysfs:file r_file_perms;
+
+# Read cooling devices
+allow hal_thermal_rpi5 sysfs:lnk_file r_file_perms;
+
+vndk_use(hal_thermal_rpi5)

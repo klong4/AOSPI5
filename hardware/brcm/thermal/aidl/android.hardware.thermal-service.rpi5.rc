@@ -1,0 +1,4 @@
+service vendor.thermal.rpi5 /vendor/bin/hw/android.hardware.thermal-service.rpi5
+    class hal
+    user system
+    group system

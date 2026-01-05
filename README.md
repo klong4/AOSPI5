@@ -4,7 +4,7 @@ A fully-featured Android port for Raspberry Pi 5 with comprehensive hardware sup
 
 ## Features
 
-- **Full AOSP 14 (Android 14)** base
+- **Full AOSP 16 (Android 16)** base
 - **Hardware Acceleration** via VideoCore VII GPU (V3D 7.1)
 - **Complete GPIO Support** with Android HAL
 - **Camera Support** (Pi Camera Module 3, USB cameras)
@@ -88,8 +88,8 @@ sudo apt-get install -y \
 # Create working directory
 mkdir -p ~/aospi5 && cd ~/aospi5
 
-# Initialize repo with Android 14
-repo init -u https://android.googlesource.com/platform/manifest -b android-14.0.0_r1
+# Initialize repo with Android 16
+repo init -u https://android.googlesource.com/platform/manifest -b android-16.0.0_r1
 
 # Add local manifests
 mkdir -p .repo/local_manifests

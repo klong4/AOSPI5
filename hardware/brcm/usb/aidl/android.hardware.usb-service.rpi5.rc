@@ -1,0 +1,4 @@
+service vendor.usb.rpi5 /vendor/bin/hw/android.hardware.usb-service.rpi5
+    class hal
+    user system
+    group system usb

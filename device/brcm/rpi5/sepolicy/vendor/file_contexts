@@ -1,4 +1,5 @@
 # Raspberry Pi 5 SELinux File Contexts
+# Android 16 - AIDL HALs
 
 # Device files
 /dev/gpiochip[0-9]*              u:object_r:gpio_device:s0
@@ -12,10 +13,19 @@
 /dev/dri/card[0-9]*              u:object_r:gpu_device:s0
 /dev/dri/renderD[0-9]*           u:object_r:gpu_device:s0
 
-# HAL executables
+# AIDL HAL executables (Android 16)
+/vendor/bin/hw/android\.hardware\.gpio-service\.rpi5           u:object_r:hal_gpio_rpi5_exec:s0
+/vendor/bin/hw/android\.hardware\.power-service\.rpi5          u:object_r:hal_power_rpi5_exec:s0
+/vendor/bin/hw/android\.hardware\.thermal-service\.rpi5        u:object_r:hal_thermal_rpi5_exec:s0
+/vendor/bin/hw/android\.hardware\.light-service\.rpi5          u:object_r:hal_light_rpi5_exec:s0
+/vendor/bin/hw/android\.hardware\.usb-service\.rpi5            u:object_r:hal_usb_rpi5_exec:s0
+/vendor/bin/hw/android\.hardware\.camera\.provider-service\.rpi5  u:object_r:hal_camera_rpi5_exec:s0
+/vendor/bin/hw/android\.hardware\.audio\.core-service\.rpi5    u:object_r:hal_audio_rpi5_exec:s0
+
+# Legacy HIDL HAL executables (deprecated, kept for reference)
 /vendor/bin/hw/android\.hardware\.gpio@1\.0-service\.rpi5      u:object_r:hal_gpio_rpi5_exec:s0
-/vendor/bin/hw/android\.hardware\.power@1\.3-service\.rpi5     u:object_r:hal_power_default_exec:s0
-/vendor/bin/hw/android\.hardware\.thermal@2\.0-service\.rpi5   u:object_r:hal_thermal_default_exec:s0
+/vendor/bin/hw/android\.hardware\.power@1\.3-service\.rpi5     u:object_r:hal_power_rpi5_exec:s0
+/vendor/bin/hw/android\.hardware\.thermal@2\.0-service\.rpi5   u:object_r:hal_thermal_rpi5_exec:s0
 /vendor/bin/hw/android\.hardware\.light@2\.0-service\.rpi5     u:object_r:hal_light_rpi5_exec:s0
 /vendor/bin/hw/android\.hardware\.usb@1\.3-service\.rpi5       u:object_r:hal_usb_rpi5_exec:s0
 /vendor/bin/hw/android\.hardware\.camera\.provider@2\.7-service\.rpi5  u:object_r:hal_camera_rpi5_exec:s0

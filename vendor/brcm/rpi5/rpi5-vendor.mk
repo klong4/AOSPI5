@@ -1,5 +1,6 @@
-# Copyright (C) 2024 The Android Open Source Project
+# Copyright (C) 2025 The Android Open Source Project
 # Raspberry Pi 5 Vendor Product Configuration
+# Android 16 - AIDL HALs
 
 PRODUCT_SOONG_NAMESPACES += \
     vendor/brcm/rpi5
@@ -19,21 +20,15 @@ PRODUCT_COPY_FILES += \
     vendor/brcm/rpi5/proprietary/firmware/fixup4.dat:boot/fixup4.dat \
     vendor/brcm/rpi5/proprietary/firmware/bcm2712-rpi-5-b.dtb:boot/bcm2712-rpi-5-b.dtb
 
-# HAL Implementations
+# AIDL HAL Implementations (Android 16)
 PRODUCT_PACKAGES += \
-    android.hardware.gpio@1.0-impl.rpi5 \
-    android.hardware.gpio@1.0-service.rpi5 \
-    android.hardware.power@1.3-impl.rpi5 \
-    android.hardware.power@1.3-service.rpi5 \
-    android.hardware.thermal@2.0-impl.rpi5 \
-    android.hardware.thermal@2.0-service.rpi5 \
-    android.hardware.light@2.0-impl.rpi5 \
-    android.hardware.light@2.0-service.rpi5 \
-    android.hardware.usb@1.3-impl.rpi5 \
-    android.hardware.usb@1.3-service.rpi5 \
-    android.hardware.camera.provider@2.7-impl.rpi5 \
-    android.hardware.camera.provider@2.7-service.rpi5 \
-    android.hardware.audio.service.rpi5 \
+    android.hardware.gpio-service.rpi5 \
+    android.hardware.power-service.rpi5 \
+    android.hardware.thermal-service.rpi5 \
+    android.hardware.light-service.rpi5 \
+    android.hardware.usb-service.rpi5 \
+    android.hardware.camera.provider-service.rpi5 \
+    android.hardware.audio.core-service.rpi5 \
     audio.primary.rpi5 \
     camera.rpi5
 
@@ -49,4 +44,4 @@ PRODUCT_PACKAGES += \
 
 # Vendor property overrides
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.build.fingerprint=brcm/rpi5/rpi5:14/UP1A.231105.001/1:userdebug/dev-keys
+    ro.vendor.build.fingerprint=brcm/rpi5/rpi5:16/AP1A.241205.001/1:userdebug/dev-keys

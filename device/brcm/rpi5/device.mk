@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2024 The Android Open Source Project
+# Copyright (C) 2025 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,22 +28,20 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_ven
 # Generic ramdisk configs
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 
-# Fastboot HAL
+# Fastboot HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.fastboot@1.1-impl-mock \
+    android.hardware.fastboot-service.example \
     fastbootd
 
-# Boot control HAL
+# Boot control HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.boot@1.2-impl \
-    android.hardware.boot@1.2-impl.recovery \
-    android.hardware.boot@1.2-service
+    android.hardware.boot-service.default \
+    android.hardware.boot-service.default_recovery
 
-# Health HAL
+# Health HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.health@2.1-impl \
-    android.hardware.health@2.1-impl.recovery \
-    android.hardware.health@2.1-service
+    android.hardware.health-service.example \
+    android.hardware.health-service.example_recovery
 
 # Update engine
 PRODUCT_PACKAGES += \
@@ -52,17 +50,15 @@ PRODUCT_PACKAGES += \
     update_verifier \
     update_engine_sideload
 
-# USB HAL
+# USB HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.3-service.rpi5 \
-    android.hardware.usb.gadget@1.2-service.rpi5
+    android.hardware.usb-service.rpi5 \
+    android.hardware.usb.gadget-service.rpi5
 
-# Audio HAL
+# Audio HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.audio@7.1-impl \
-    android.hardware.audio.effect@7.0-impl \
-    android.hardware.audio.service \
-    android.hardware.soundtrigger@2.3-impl \
+    android.hardware.audio.core-service.rpi5 \
+    android.hardware.audio.effect-service.example \
     audio.primary.rpi5 \
     audio.usb.default \
     audio.r_submix.default \
@@ -83,15 +79,15 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
 
-# Bluetooth HAL
+# Bluetooth HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.1-service.btlinux \
-    android.hardware.bluetooth.audio@2.1-impl \
+    android.hardware.bluetooth-service.default \
+    android.hardware.bluetooth.audio-service.default \
     libbt-vendor
 
-# WiFi HAL
+# WiFi HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.wifi@1.6-service \
+    android.hardware.wifi-service \
     wpa_supplicant \
     wpa_supplicant.conf \
     hostapd \
@@ -103,11 +99,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
     $(LOCAL_PATH)/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf
 
-# Graphics HAL - Mesa/Drm
+# Graphics HAL - Mesa/Drm (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.allocator@4.0-service.minigbm \
-    android.hardware.graphics.composer@2.4-service \
-    android.hardware.graphics.mapper@4.0-impl.minigbm \
+    android.hardware.graphics.allocator-service.minigbm \
+    android.hardware.graphics.composer3-service.ranchu \
+    mapper.minigbm \
     hwcomposer.drm \
     gralloc.minigbm \
     libGLES_mesa \
@@ -116,40 +112,39 @@ PRODUCT_PACKAGES += \
     libGLESv2_mesa \
     vulkan.broadcom
 
-# DRM HAL
+# DRM HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.4-service.clearkey
+    android.hardware.drm-service.clearkey
 
-# Gatekeeper HAL
+# Gatekeeper HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0-service.software
+    android.hardware.gatekeeper-service.software
 
-# Keymaster HAL
+# KeyMint HAL (replaces Keymaster in Android 16)
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@4.1-service
+    android.hardware.security.keymint-service.rust \
+    android.hardware.security.sharedsecret-service.nonsecure \
+    android.hardware.security.secureclock-service.nonsecure
 
-# Power HAL
+# Power HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.3-service.rpi5 \
-    android.hardware.power.stats@1.0-service.mock
+    android.hardware.power-service.rpi5
 
-# Thermal HAL
+# Thermal HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.thermal@2.0-service.rpi5
+    android.hardware.thermal-service.rpi5
 
-# Light HAL
+# Light HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.rpi5
+    android.hardware.light-service.rpi5
 
-# Memtrack HAL
+# Memtrack HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.memtrack@1.0-impl \
-    android.hardware.memtrack@1.0-service
+    android.hardware.memtrack-service.example
 
-# Camera HAL
+# Camera HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.camera.provider@2.7-service.rpi5 \
-    android.hardware.camera.provider@2.7-impl.rpi5 \
+    android.hardware.camera.provider-service.rpi5 \
     camera.rpi5 \
     libcamera \
     libcamera-hal
@@ -158,22 +153,18 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/camera/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
-# Sensors HAL
+# Sensors HAL (AIDL)
 PRODUCT_PACKAGES += \
-    android.hardware.sensors@2.1-service.multihal \
-    android.hardware.sensors@2.1-service.mock
+    android.hardware.sensors-service.multihal \
+    android.hardware.sensors-service.example
 
-# GPIO HAL (Raspberry Pi specific)
+# GPIO HAL (AIDL - Raspberry Pi specific)
 PRODUCT_PACKAGES += \
-    android.hardware.gpio@1.0-service.rpi5 \
-    android.hardware.gpio@1.0-impl.rpi5 \
+    android.hardware.gpio-service.rpi5 \
     gpio_service \
     libgpiod
 
-# Display settings
-PRODUCT_PACKAGES += \
-    android.hardware.configstore@1.1-service
-
+# Display settings (removed deprecated configstore)
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.surface_flinger.max_frame_buffer_acquired_buffers=3 \
     ro.surface_flinger.present_time_offset_from_vsync_ns=0 \

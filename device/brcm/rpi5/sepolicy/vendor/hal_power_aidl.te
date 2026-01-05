@@ -1,0 +1,22 @@
+# SELinux policy for AIDL Power HAL - Android 16
+# Raspberry Pi 5
+
+type hal_power_rpi5, domain;
+type hal_power_rpi5_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(hal_power_rpi5)
+binder_use(hal_power_rpi5)
+
+# Allow Power HAL to serve AIDL interface
+hal_server_domain(hal_power_rpi5, hal_power)
+
+# CPU frequency control
+allow hal_power_rpi5 sysfs_devices_system_cpu:dir r_dir_perms;
+allow hal_power_rpi5 sysfs_devices_system_cpu:file rw_file_perms;
+
+# Read/write scaling governor
+allow hal_power_rpi5 sysfs:dir r_dir_perms;
+allow hal_power_rpi5 sysfs:file rw_file_perms;
+
+# VNDK
+vndk_use(hal_power_rpi5)

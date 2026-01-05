@@ -1,8 +1,9 @@
 # Raspberry Pi 5 Android Kernel Configuration
-# Based on Linux 6.6 LTS for BCM2712
+# Based on Linux 6.12 LTS for BCM2712
+# Android 16 compatible
 
 # General setup
-CONFIG_LOCALVERSION="-rpi5-android"
+CONFIG_LOCALVERSION="-rpi5-android16"
 CONFIG_ANDROID=y
 CONFIG_IKCONFIG=y
 CONFIG_IKCONFIG_PROC=y
