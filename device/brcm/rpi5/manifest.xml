@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Device HAL manifest for Raspberry Pi 5 - Android 16 (AIDL) -->
-<manifest version="2.0" type="device">
+<manifest version="2.0" type="device" target-level="202404">
     <!-- Audio (AIDL) -->
     <hal format="aidl">
         <name>android.hardware.audio.core</name>
@@ -38,7 +38,7 @@
     <hal format="aidl">
         <name>android.hardware.camera.provider</name>
         <version>2</version>
-        <fqname>ICameraProvider/default</fqname>
+        <fqname>ICameraProvider/internal/0</fqname>
         <fqname>ICameraProvider/external/0</fqname>
     </hal>
 
@@ -60,16 +60,8 @@
         <version>1</version>
         <fqname>IDrmFactory/default</fqname>
         <fqname>IDrmFactory/clearkey</fqname>
-        <fqname>ICryptoFactory/default</fqname>
-        <fqname>ICryptoFactory/clearkey</fqname>
     </hal>
 
-    <!-- Fastboot (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.fastboot</name>
-        <version>1</version>
-        <fqname>IFastboot/default</fqname>
-    </hal>
 
     <!-- Gatekeeper (AIDL) -->
     <hal format="aidl">
@@ -78,19 +70,7 @@
         <fqname>IGatekeeper/default</fqname>
     </hal>
 
-    <!-- GPIO (AIDL - Raspberry Pi specific) -->
-    <hal format="aidl">
-        <name>android.hardware.gpio</name>
-        <version>1</version>
-        <fqname>IGpio/default</fqname>
-    </hal>
 
-    <!-- Health (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.health</name>
-        <version>3</version>
-        <fqname>IHealth/default</fqname>
-    </hal>
 
     <!-- Keymint (replaces Keymaster in Android 16) -->
     <hal format="aidl">
@@ -116,19 +96,7 @@
         <fqname>ILights/default</fqname>
     </hal>
 
-    <!-- Memtrack (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.memtrack</name>
-        <version>1</version>
-        <fqname>IMemtrack/default</fqname>
-    </hal>
 
-    <!-- Power (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.power</name>
-        <version>5</version>
-        <fqname>IPower/default</fqname>
-    </hal>
 
     <!-- Sensors (AIDL) -->
     <hal format="aidl">

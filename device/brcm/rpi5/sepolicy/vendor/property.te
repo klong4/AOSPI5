@@ -1,0 +1,7 @@
+# Raspberry Pi 5 vendor property types
+
+# Display property type (inherits from vendor_property_type for sysprop ownership)
+type vendor_display_prop, property_type, vendor_property_type;
+
+# Touch property type
+type vendor_touch_prop, property_type, vendor_property_type;

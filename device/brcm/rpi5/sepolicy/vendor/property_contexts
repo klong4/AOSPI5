@@ -1,45 +1,10 @@
-# Raspberry Pi 5 SELinux Property Contexts
+# Raspberry Pi 5 SELinux Vendor Property Contexts
+# Only vendor-prefixed properties are allowed here
 
-# Device properties
-ro.hardware.                 u:object_r:default_prop:s0
-ro.board.                    u:object_r:default_prop:s0
-ro.boot.hardware             u:object_r:default_prop:s0
-
-# USB properties
-sys.usb.                     u:object_r:system_prop:s0
-sys.usb.config               u:object_r:system_prop:s0
-sys.usb.configfs             u:object_r:system_prop:s0
-sys.usb.controller           u:object_r:system_prop:s0
-sys.usb.ffs.ready            u:object_r:system_prop:s0
-sys.usb.state                u:object_r:system_prop:s0
-
-# Bluetooth properties
-bluetooth.                   u:object_r:bluetooth_prop:s0
-persist.bluetooth.           u:object_r:bluetooth_prop:s0
-
-# WiFi properties
-wifi.                        u:object_r:wifi_prop:s0
-wlan.                        u:object_r:wifi_prop:s0
-
-# Power management
-persist.sys.power.           u:object_r:system_prop:s0
-
-# Display properties
-persist.sys.sf.              u:object_r:system_prop:s0
-ro.surface_flinger.          u:object_r:default_prop:s0
+# Vendor display properties
 vendor.display.              u:object_r:vendor_display_prop:s0
 persist.vendor.display.      u:object_r:vendor_display_prop:s0
-vendor.display.panel         u:object_r:vendor_display_prop:s0
-vendor.display.resolution    u:object_r:vendor_display_prop:s0
-vendor.display.rotation      u:object_r:vendor_display_prop:s0
-vendor.display.backlight     u:object_r:vendor_display_prop:s0
 
-# Touch properties
+# Vendor touch properties
 vendor.touch.                u:object_r:vendor_touch_prop:s0
 persist.vendor.touch.        u:object_r:vendor_touch_prop:s0
-vendor.touch.controller      u:object_r:vendor_touch_prop:s0
-vendor.touch.calibration     u:object_r:vendor_touch_prop:s0
-
-# GPU properties
-ro.hardware.vulkan           u:object_r:default_prop:s0
-ro.hardware.egl              u:object_r:default_prop:s0

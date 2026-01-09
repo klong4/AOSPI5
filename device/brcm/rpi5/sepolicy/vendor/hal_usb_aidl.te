@@ -19,8 +19,3 @@ allow hal_usb_rpi5 sysfs:lnk_file r_file_perms;
 allow hal_usb_rpi5 configfs:dir rw_dir_perms;
 allow hal_usb_rpi5 configfs:file rw_file_perms;
 allow hal_usb_rpi5 configfs:lnk_file create_file_perms;
-
-# UDC access
-allow hal_usb_rpi5 device:dir r_dir_perms;
-
-vndk_use(hal_usb_rpi5)

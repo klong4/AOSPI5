@@ -54,11 +54,15 @@ BOARD_KERNEL_CMDLINE += init=/init
 BOARD_KERNEL_CMDLINE += firmware_class.path=/vendor/firmware
 
 BOARD_KERNEL_IMAGE_NAME := Image
+# Use prebuilt GKI kernel
+TARGET_PREBUILT_KERNEL := kernel/prebuilts/6.6/arm64/kernel-6.6
+BOARD_USES_GENERIC_KERNEL_IMAGE := true
+BOARD_KERNEL_VERSION := 6.6.66-android15-8-g807ce3b4f02f-ab12996908-4k
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_SOURCE := kernel/brcm/rpi5
-TARGET_KERNEL_CONFIG := rpi5_android_defconfig
-TARGET_KERNEL_ADDITIONAL_FLAGS := DTC_EXT=$(shell pwd)/prebuilts/misc/linux-x86/dtc/dtc
+#TARGET_KERNEL_SOURCE := kernel/brcm/rpi5
+#TARGET_KERNEL_CONFIG := rpi5_android_defconfig
+#TARGET_KERNEL_ADDITIONAL_FLAGS := DTC_EXT=$(shell pwd)/prebuilts/misc/linux-x86/dtc/dtc
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 
 # Kernel modules
@@ -213,3 +217,5 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
 # Include vendor-specific configurations
 -include vendor/brcm/rpi5/BoardConfigVendor.mk
+
+BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true

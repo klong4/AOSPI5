@@ -1,11 +1,5 @@
 # Raspberry Pi 5 HAL Server SELinux Policy
+# AIDL uses binder service_manager, not hwservice_manager
 
-# Allow HAL domains to use HwBinder
-allow hal_audio_rpi5 hal_audio_hwservice:hwservice_manager { add find };
-allow hal_camera_rpi5 hal_camera_hwservice:hwservice_manager { add find };
-allow hal_gpio_rpi5 hal_gpio_hwservice:hwservice_manager { add find };
-allow hal_light_rpi5 hal_light_hwservice:hwservice_manager { add find };
-allow hal_usb_rpi5 hal_usb_hwservice:hwservice_manager { add find };
-
-# Define GPIO HAL service type
-type hal_gpio_hwservice, hwservice_manager_type;
+# Allow HAL domains to register and find AIDL services
+# These are handled by hal_server_domain macros in individual HAL .te files

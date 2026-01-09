@@ -8,19 +8,14 @@ init_daemon_domain(hal_gpio_rpi5)
 binder_use(hal_gpio_rpi5)
 
 # Allow GPIO HAL to serve AIDL interface
-hal_server_domain(hal_gpio_rpi5, hal_gpio)
 
 # GPIO device access
 allow hal_gpio_rpi5 gpio_device:chr_file rw_file_perms;
-allow hal_gpio_rpi5 device:dir r_dir_perms;
 
-# sysfs GPIO access
-allow hal_gpio_rpi5 sysfs_gpio:dir rw_dir_perms;
+# sysfs GPIO access (read-only dirs, read-write files)
+allow hal_gpio_rpi5 sysfs_gpio:dir r_dir_perms;
 allow hal_gpio_rpi5 sysfs_gpio:file rw_file_perms;
 allow hal_gpio_rpi5 sysfs:dir r_dir_perms;
 allow hal_gpio_rpi5 sysfs:file rw_file_perms;
 
-# gpiod library needs
-allow hal_gpio_rpi5 self:capability { sys_rawio };
-
-vndk_use(hal_gpio_rpi5)
+# gpiod library needs (no mknod - violates neverallow)

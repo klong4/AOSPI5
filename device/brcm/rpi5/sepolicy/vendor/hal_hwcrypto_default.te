@@ -1,0 +1,7 @@
+# SELinux policy for Trusty hwcrypto HAL
+# This type is referenced in system/sepolicy/vendor/file_contexts but not defined
+
+type hal_hwcrypto_default, domain;
+type hal_hwcrypto_default_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(hal_hwcrypto_default)

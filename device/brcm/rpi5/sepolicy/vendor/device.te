@@ -1,0 +1,19 @@
+# Raspberry Pi 5 Custom Device Types
+
+# GPIO devices (/dev/gpiochip*, /dev/gpiomem)
+type gpio_device, dev_type;
+
+# SPI devices (/dev/spidev*)
+type spidev_device, dev_type;
+
+# I2C devices (/dev/i2c-*)
+type i2c_device, dev_type;
+
+# Framebuffer devices (/dev/fb*)
+type fb_device, dev_type;
+
+# BCM ISP devices (Raspberry Pi camera/video processor)
+type bcm_isp_device, dev_type;
+
+# PCIe devices
+type pci_device, dev_type;

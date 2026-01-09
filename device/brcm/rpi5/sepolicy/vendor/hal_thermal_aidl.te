@@ -19,4 +19,3 @@ allow hal_thermal_rpi5 sysfs:file r_file_perms;
 # Read cooling devices
 allow hal_thermal_rpi5 sysfs:lnk_file r_file_perms;
 
-vndk_use(hal_thermal_rpi5)

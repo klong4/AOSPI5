@@ -7,15 +7,9 @@ init_daemon_domain(hal_camera_rpi5)
 
 hal_server_domain(hal_camera_rpi5, hal_camera)
 
-# Access to video devices (/dev/video*)
+# Access to video devices (/dev/video*, /dev/v4l-subdev*, /dev/media*)
 allow hal_camera_rpi5 video_device:chr_file rw_file_perms;
 allow hal_camera_rpi5 video_device:dir r_dir_perms;
-
-# Access to media devices (/dev/media*)
-allow hal_camera_rpi5 device:chr_file { read write ioctl open };
-
-# V4L2 subdevice access (/dev/v4l-subdev*)
-allow hal_camera_rpi5 v4l-subdev_device:chr_file rw_file_perms;
 
 # Access to DRM for buffer allocation
 allow hal_camera_rpi5 gpu_device:chr_file rw_file_perms;
@@ -23,8 +17,6 @@ allow hal_camera_rpi5 gpu_device:chr_file rw_file_perms;
 # Allow camera HAL to read from sysfs
 allow hal_camera_rpi5 sysfs:file r_file_perms;
 allow hal_camera_rpi5 sysfs:dir r_dir_perms;
-allow hal_camera_rpi5 sysfs_video:file r_file_perms;
-allow hal_camera_rpi5 sysfs_video:dir r_dir_perms;
 
 # I2C access for camera sensor control
 allow hal_camera_rpi5 i2c_device:chr_file rw_file_perms;
@@ -33,9 +25,9 @@ allow hal_camera_rpi5 i2c_device:chr_file rw_file_perms;
 allow hal_camera_rpi5 vendor_configs_file:file r_file_perms;
 allow hal_camera_rpi5 vendor_configs_file:dir r_dir_perms;
 
-# libcamera configuration
-allow hal_camera_rpi5 vendor_camera_data_file:file rw_file_perms;
-allow hal_camera_rpi5 vendor_camera_data_file:dir rw_dir_perms;
+# Vendor camera data (libcamera configuration)
+allow hal_camera_rpi5 vendor_data_file:file rw_file_perms;
+allow hal_camera_rpi5 vendor_data_file:dir rw_dir_perms;
 
 # Binder access
 binder_call(hal_camera_rpi5, cameraserver)
@@ -44,16 +36,8 @@ binder_call(cameraserver, hal_camera_rpi5)
 # HwBinder
 hwbinder_use(hal_camera_rpi5)
 
-# Ion memory access
+# Ion memory access (if available)
 allow hal_camera_rpi5 ion_device:chr_file rw_file_perms;
+
+# DMA-BUF heap access (Android 11+)
 allow hal_camera_rpi5 dmabuf_system_heap_device:chr_file rw_file_perms;
-allow hal_camera_rpi5 dmabuf_cma_heap_device:chr_file rw_file_perms;
-
-# ISP access for Raspberry Pi BCM2835/BCM2711/BCM2712
-allow hal_camera_rpi5 bcm_isp_device:chr_file rw_file_perms;
-
-# Autofocus lens controller (DW9714, DW9768, DW9807, DW9817)
-allow hal_camera_rpi5 vcm_device:chr_file rw_file_perms;
-
-# Flash controller (LM3560, LM3646)
-allow hal_camera_rpi5 led_device:chr_file rw_file_perms;

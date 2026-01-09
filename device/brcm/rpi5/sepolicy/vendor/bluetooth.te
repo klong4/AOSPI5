@@ -1,5 +1,9 @@
 # Raspberry Pi 5 Bluetooth SELinux Policy
 
+# Define types
+type sysfs_rfkill, sysfs_type, fs_type;
+type sysfs_bluetooth, sysfs_type, fs_type;
+
 # Bluetooth attachment service
 type btattach, domain;
 type btattach_exec, exec_type, vendor_file_type, file_type;
@@ -23,5 +27,4 @@ allow btattach sysfs_bluetooth:dir r_dir_perms;
 # Allow waking device
 wakelock_use(btattach)
 
-# Property access
-set_prop(btattach, bluetooth_prop)
+# Note: bluetooth_prop access removed - non-coredomain cannot set core properties

@@ -1,0 +1,15 @@
+# Raspberry Pi 5 Custom File Types
+
+# Sysfs types
+type sysfs_gpio, fs_type, sysfs_type;
+type sysfs_drm, fs_type, sysfs_type;
+type sysfs_backlight, fs_type, sysfs_type;
+type sysfs_pwm, fs_type, sysfs_type;
+type sysfs_pci, fs_type, sysfs_type;
+type sysfs_devices, fs_type, sysfs_type;
+type sysfs_video, fs_type, sysfs_type;
+type sysfs_input, fs_type, sysfs_type;
+
+# Vendor data files
+type vendor_camera_data_file, vendor_file_type, file_type;
+type vendor_npu_model_file, vendor_file_type, file_type;
