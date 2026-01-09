@@ -1,0 +1,35 @@
+# Raspberry Pi 5 - Android 16 Boot Configuration
+
+# Enable 64-bit mode
+arm_64bit=1
+
+# GPU memory allocation
+gpu_mem=256
+
+# Display settings
+hdmi_force_hotplug=1
+disable_overscan=1
+
+# Enable DRM/KMS driver
+dtoverlay=vc4-kms-v3d
+
+# Boot kernel
+kernel=Image
+
+# Device tree
+device_tree=bcm2712-rpi-5-b.dtb
+
+# Enable UART for debugging (optional)
+enable_uart=1
+
+# Boot partition settings
+boot_delay=1
+
+# Force 4K page size for kernel (required for Android)
+kernel=Image
+
+# Initial ramdisk
+initramfs ramdisk.img followkernel
+
+# Kernel command line (passed via cmdline.txt)
+# Additional kernel parameters in cmdline.txt
