@@ -75,8 +75,8 @@
     <bool name="config_dozeAlwaysOnEnabled">false</bool>
     <bool name="config_dozePulseOnAodEnabled">false</bool>
 
-    <!-- Screen density -->
-    <integer name="config_screenBrightnessDimFloat">0.04</integer>
+    <!-- Screen brightness dim float (requires item format for float) -->
+    <item name="config_screenBrightnessDimFloat" format="float" type="dimen">0.04</item>
 
     <!-- Long press timeout -->
     <integer name="config_longPressOnPowerBehavior">1</integer>

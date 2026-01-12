@@ -219,3 +219,8 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 -include vendor/brcm/rpi5/BoardConfigVendor.mk
 
 BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true
+
+# Skip ABI checks for custom builds
+SKIP_ABI_CHECKS := true
+BUILD_BROKEN_ENFORCE_SYSPROP_OWNER := true
+BUILD_BROKEN_DUP_RULES := true
