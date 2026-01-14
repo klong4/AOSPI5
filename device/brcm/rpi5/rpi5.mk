@@ -21,8 +21,49 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
-# Inherit from device-specific configurations
-$(call inherit-product, device/brcm/rpi5/device_simple.mk)
+# Inherit from device-specific configurations (full version with all HALs)
+$(call inherit-product, device/brcm/rpi5/device.mk)
+
+# Essential AOSP Apps - ensure they're included
+# Note: PermissionController is in Permission APEX, don't add directly
+PRODUCT_PACKAGES += \
+    Launcher3QuickStep \
+    Browser2 \
+    Calendar \
+    Camera2 \
+    Contacts \
+    DeskClock \
+    Gallery2 \
+    Music \
+    LatinIME \
+    QuickSearchBox \
+    Settings \
+    SettingsIntelligence \
+    DocumentsUI \
+    HTMLViewer \
+    PrintSpooler \
+    Traceur \
+    CalendarProvider \
+    ContactsProvider \
+    DownloadProvider \
+    MediaProvider \
+    UserDictionaryProvider \
+    ExternalStorageProvider \
+    InputDevices \
+    KeyChain \
+    CertInstaller
+
+# Development / Debug tools (userdebug only)
+PRODUCT_PACKAGES_DEBUG += \
+    Development
+
+# Include GApps if available (user must add manually)
+# To add GApps: download OpenGApps/MindTheGapps and extract to vendor/gapps
+$(call inherit-product-if-exists, vendor/gapps/gapps.mk)
+
+# Include MicroG if available (FOSS alternative to Google Play Services)
+$(call inherit-product-if-exists, vendor/AuroraGSI/AuroraGSI.mk)
+$(call inherit-product-if-exists, vendor/AuroraDroid/AuroraDroid.mk)
 
 # Inherit vendor configurations if available
 $(call inherit-product-if-exists, vendor/brcm/rpi5/rpi5-vendor.mk)

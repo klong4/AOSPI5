@@ -1,30 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Device HAL manifest for Raspberry Pi 5 - Android 16 (AIDL) -->
+<!-- Minimal manifest - most HALs provide their own manifest fragments -->
 <manifest version="2.0" type="device" target-level="202404">
     <!-- Audio (AIDL) -->
     <hal format="aidl">
         <name>android.hardware.audio.core</name>
         <version>2</version>
         <fqname>IModule/default</fqname>
-        <fqname>IModule/usb</fqname>
-        <fqname>IModule/bluetooth</fqname>
     </hal>
     <hal format="aidl">
         <name>android.hardware.audio.effect</name>
         <version>2</version>
         <fqname>IFactory/default</fqname>
-    </hal>
-
-    <!-- Bluetooth (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.bluetooth</name>
-        <version>1</version>
-        <fqname>IBluetoothHci/default</fqname>
-    </hal>
-    <hal format="aidl">
-        <name>android.hardware.bluetooth.audio</name>
-        <version>4</version>
-        <fqname>IBluetoothAudioProviderFactory/default</fqname>
     </hal>
 
     <!-- Boot (AIDL) -->
@@ -42,35 +29,12 @@
         <fqname>ICameraProvider/external/0</fqname>
     </hal>
 
-    <!-- Composer/Graphics (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.graphics.allocator</name>
-        <version>2</version>
-        <fqname>IAllocator/default</fqname>
-    </hal>
+    <!-- Composer/Graphics (AIDL) - allocator provided by service -->
     <hal format="aidl">
         <name>android.hardware.graphics.composer3</name>
         <version>3</version>
         <fqname>IComposer/default</fqname>
     </hal>
-
-    <!-- DRM (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.drm</name>
-        <version>1</version>
-        <fqname>IDrmFactory/default</fqname>
-        <fqname>IDrmFactory/clearkey</fqname>
-    </hal>
-
-
-    <!-- Gatekeeper (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.gatekeeper</name>
-        <version>1</version>
-        <fqname>IGatekeeper/default</fqname>
-    </hal>
-
-
 
     <!-- Keymint (replaces Keymaster in Android 16) -->
     <hal format="aidl">
@@ -96,15 +60,6 @@
         <fqname>ILights/default</fqname>
     </hal>
 
-
-
-    <!-- Sensors (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.sensors</name>
-        <version>2</version>
-        <fqname>ISensors/default</fqname>
-    </hal>
-
     <!-- Thermal (AIDL) -->
     <hal format="aidl">
         <name>android.hardware.thermal</name>
@@ -122,23 +77,6 @@
         <name>android.hardware.usb.gadget</name>
         <version>1</version>
         <fqname>IUsbGadget/default</fqname>
-    </hal>
-
-    <!-- WiFi (AIDL) -->
-    <hal format="aidl">
-        <name>android.hardware.wifi</name>
-        <version>2</version>
-        <fqname>IWifi/default</fqname>
-    </hal>
-    <hal format="aidl">
-        <name>android.hardware.wifi.supplicant</name>
-        <version>3</version>
-        <fqname>ISupplicant/default</fqname>
-    </hal>
-    <hal format="aidl">
-        <name>android.hardware.wifi.hostapd</name>
-        <version>2</version>
-        <fqname>IHostapd/default</fqname>
     </hal>
 
     <!-- Vibrator (AIDL - optional for Pi) -->
